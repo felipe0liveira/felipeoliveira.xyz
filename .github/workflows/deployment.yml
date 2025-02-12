@@ -35,6 +35,10 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: ${{ env.CREDENTIALS }}
+
+      - name: Load environment variables in env.yml
+        run: |
+          envsubst < env.yml > cloudrun.yml
       
       - name: Cloud Run Deploy
         run: |-
@@ -43,7 +47,7 @@ jobs:
           --region "$CLOUD_RUN_REGION" \
           --image "$DOCKER_IMAGE:latest" \
           --account "$SERVICE_ACCOUNT_EMAIL" \
-          --env-vars-file cloudrun.yaml \
+          --env-vars-file cloudrun.yml \
           --labels "application=next-ssr" \
           --quiet
   

@@ -10,11 +10,8 @@ on:
 
 env:
   CREDENTIALS: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}
-
   DOCKER_IMAGE: '${{ vars.DOCKER_PATH }}/next-ssr-app'
   DOCKER_REGION: ${{ vars.DOCKER_REGION }}
-  
-  CLOUD_RUN_SERVICE_URL: ${{ vars.CLOUD_RUN_SERVICE_URL }}
 
 jobs:
   build:
@@ -44,9 +41,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          DOCKER_BUILDKIT=1 docker build \
-          --build-arg NEXT_PUBLIC_API_URL=${{ env.CLOUD_RUN_SERVICE_URL }} \
-          -t $DOCKER_IMAGE:latest .
+          DOCKER_BUILDKIT=1 docker build -t $DOCKER_IMAGE:latest .
         
       - name: Push Docker Image
         run: docker push $DOCKER_IMAGE:latest
