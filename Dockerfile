@@ -10,6 +10,9 @@ COPY cloudrun.yaml ./cloudrun.yaml
 
 COPY . .
 
+# For production Image Optimization with Next.js
+run yarn install sharp
+
 RUN yarn build
 
 ENV NODE_ENV=production
