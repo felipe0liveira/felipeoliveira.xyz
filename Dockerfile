@@ -4,6 +4,7 @@ WORKDIR /usr/app
 
 COPY package.json yarn.lock ./
 RUN yarn install
+RUN yarn add sharp
 
 COPY cloudrun.yaml ./cloudrun.yaml
 
