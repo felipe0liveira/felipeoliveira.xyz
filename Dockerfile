@@ -2,15 +2,18 @@ FROM node:20.13.0-alpine
 
 WORKDIR /usr/app
 
-COPY package.json ./
-COPY yarn.lock ./
+COPY package.json yarn.lock ./
 
-EXPOSE 3000
+RUN yarn install --frozen-lockfile --production
 
-RUN yarn install
+COPY cloudrun.yaml ./cloudrun.yaml
 
 COPY . .
 
 RUN yarn build
 
-CMD yarn start
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD ["yarn" "start"]
