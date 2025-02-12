@@ -11,7 +11,7 @@ COPY cloudrun.yaml ./cloudrun.yaml
 COPY . .
 
 # For production Image Optimization with Next.js
-run yarn add sharp
+RUN yarn add sharp
 
 RUN yarn build
 
