@@ -27,7 +27,10 @@ jobs:
   deploy:
     name: "Deploy"
     runs-on: ubuntu-latest
-    steps:    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Setup authorization on Google Cloud Platform
         uses: 'google-github-actions/auth@v2'
         with:
