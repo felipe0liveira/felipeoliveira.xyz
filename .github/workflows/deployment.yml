@@ -1,0 +1,46 @@
+name: Production Deployment
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+env:
+  PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+  SERVICE_ACCOUNT_EMAIL: ${{ vars.SERVICE_ACCOUNT_EMAIL }}
+  CREDENTIALS: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}
+
+  DOCKER_IMAGE: '${{ vars.DOCKER_PATH }}/next-ssr-app'
+
+  CLOUD_RUN_REGION: ${{ vars.CLOUD_RUN_REGION }}
+  CLOUD_RUN_SERVICE: '${{ vars.CLOUD_RUN_SERVICE }}-production'
+  CLOUD_RUN_SERVICE_URL: ${{ vars.CLOUD_RUN_SERVICE_URL }}
+
+  GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+  VITAMINS_PRICES_FILED_ID: ${{ secrets.VITAMINS_PRICES_FILED_ID }}
+  VITAMINS_FILE_ID: ${{ secrets.VITAMINS_FILE_ID }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_EXPIRATION_TIME: ${{ vars.JWT_EXPIRATION_TIME }}
+
+jobs:  
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    steps:    
+      - name: Setup authorization on Google Cloud Platform
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ env.CREDENTIALS }}
+      
+      - name: Cloud Run Deploy
+        run: |-
+          gcloud run deploy "$CLOUD_RUN_SERVICE" \
+          --project "$PROJECT_NAME" \
+          --region "$CLOUD_RUN_REGION" \
+          --image "$DOCKER_IMAGE:latest" \
+          --account "$SERVICE_ACCOUNT_EMAIL" \
+          --env-vars-file cloudrun.yaml \
+          --labels "application=next-ssr" \
+          --quiet
+  

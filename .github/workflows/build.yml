@@ -1,0 +1,52 @@
+name: Production Build
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths-ignore:
+      - '.github/**'
+  workflow_dispatch:
+
+env:
+  CREDENTIALS: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}
+
+  DOCKER_IMAGE: '${{ vars.DOCKER_PATH }}/next-ssr-app'
+  DOCKER_REGION: ${{ vars.DOCKER_REGION }}
+  
+  CLOUD_RUN_SERVICE_URL: ${{ vars.CLOUD_RUN_SERVICE_URL }}
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup authorization on Google Cloud Platform
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ env.CREDENTIALS }}
+
+      - name: Setup docker on Google Cloud Platform
+        run: gcloud auth configure-docker $DOCKER_REGION-docker.pkg.dev
+      
+      - name: Setup SDK on Google Cloud Platform
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Build Docker Image
+        run: |
+          DOCKER_BUILDKIT=1 docker build \
+          --build-arg NEXT_PUBLIC_API_URL=${{ env.CLOUD_RUN_SERVICE_URL }} \
+          -t $DOCKER_IMAGE:latest .
+        
+      - name: Push Docker Image
+        run: docker push $DOCKER_IMAGE:latest
