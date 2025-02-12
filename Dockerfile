@@ -4,7 +4,7 @@ WORKDIR /usr/app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile --production
+RUN yarn install
 
 COPY cloudrun.yaml ./cloudrun.yaml
 
