@@ -6,7 +6,7 @@ COPY package.json yarn.lock ./
 RUN yarn install
 RUN yarn add sharp
 
-COPY cloudrun.yaml ./cloudrun.yaml
+COPY env.yml ./env.yml
 
 COPY . .
 
