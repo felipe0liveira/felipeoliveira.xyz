@@ -18,9 +18,9 @@ export const Homepage = {
 		},
 		description: {
 			'pt-BR':
-				'Eu realmente amo montanhas e a natureza. Esta foto é de uma viagem que fiz com minha esposa. Eu adorei.',
+				'Eu realmente amo montanhas e a natureza. Esta foto é de uma viagem que fiz e eu amei.',
 			'en-US':
-				'I really love mountains and nature. This photo is from a trip that I did with my wife. I looved it.',
+				'I really love mountains and nature. This photo is from a trip that I did and I looved it.',
 		},
 	},
 	aboutMe: {
