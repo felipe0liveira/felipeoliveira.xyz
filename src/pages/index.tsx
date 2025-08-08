@@ -7,7 +7,7 @@ import { Columns } from '@components/Layout'
 import { TableView } from '@components/TableView'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { request, getUserLanguage } from '@utils/index'
+import { request, getUserLanguage, trackEvent } from '@utils/index'
 import * as i18n from '@locales/i18n'
 
 export default function Home() {
@@ -19,7 +19,11 @@ export default function Home() {
 			setGithubData(data),
 		)
 
-		setLang(getUserLanguage() === 'pt-BR' ? 'pt-BR' : 'en-US')
+		const userLang = getUserLanguage() === 'pt-BR' ? 'pt-BR' : 'en-US'
+		setLang(userLang)
+
+		// Track user language preference
+		trackEvent('language_detected', 'user_preference', userLang)
 	}, [])
 
 	if (!lang)
@@ -70,7 +74,11 @@ export default function Home() {
 			<Blockquote>
 				<Paragraph>
 					{i18n.Homepage.linkedinBlockquote.text[lang]}
-					<a href='https://www.linkedin.com/in/felipe0liveira/' target='_blank'>
+					<a 
+						href='https://www.linkedin.com/in/felipe0liveira/' 
+						target='_blank'
+						onClick={() => trackEvent('external_link_click', 'social_media', 'linkedin')}
+					>
 						LinkedIn
 					</a>
 					.
@@ -100,7 +108,11 @@ export default function Home() {
 							<Blockquote>
 								<Paragraph>
 									{i18n.Homepage.githubBlockquote.text[lang]}
-									<a href='https://github.com/felipe0liveira' target='_blank'>
+									<a 
+										href='https://github.com/felipe0liveira' 
+										target='_blank'
+										onClick={() => trackEvent('external_link_click', 'social_media', 'github')}
+									>
 										Github
 									</a>
 									.
