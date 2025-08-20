@@ -1,26 +1,19 @@
-import { useState } from 'react'
-import { TitleBarProps, WindowProps, WindowState } from './types'
+import { useState, useEffect } from 'react'
+import { WindowProps, WindowState } from './types'
+import { trackEvent } from '../../utils/analytics'
 
-const TitleBar = ({
-	title,
-	onMinimize,
-	onMaximize,
-	onClose,
-}: TitleBarProps) => {
-	return (
-		<div className='title-bar'>
-			<div className='title-bar-text'>{title}</div>
-			<div className='title-bar-controls'>
-				<button aria-label='Minimize' onClick={onMinimize}></button>
-				<button aria-label='Maximize' onClick={onMaximize}></button>
-				<button aria-label='Close' onClick={onClose}></button>
-			</div>
-		</div>
-	)
-}
 
 export const Window = ({ title, children }: WindowProps) => {
 	const [windowState, setWindowState] = useState<WindowState>('opened')
+
+	useEffect(() => {
+		// Track window state changes
+		trackEvent(
+			'window_state_change',
+			'UI Interaction',
+			`${title} - ${windowState}`,
+		)
+	}, [windowState, title])
 
 	if (windowState === 'closed') return <></>
 	return (
