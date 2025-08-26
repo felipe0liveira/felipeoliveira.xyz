@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { WindowProps, WindowState } from './types'
 import { trackEvent } from '../../utils/analytics'
 
-
-export const Window = ({ title, children }: WindowProps) => {
+export const Window = ({ title, children, padding = true }: WindowProps) => {
 	const [windowState, setWindowState] = useState<WindowState>('opened')
 
 	useEffect(() => {
@@ -38,7 +37,14 @@ export const Window = ({ title, children }: WindowProps) => {
 				</div>
 			</div>
 			{['opened', 'maximized'].includes(windowState) && (
-				<div className='window-body' style={{ display: 'grid', gap: '8px' }}>
+				<div
+					className='window-body'
+					style={{
+						display: 'grid',
+						gap: '8px',
+						...(padding ? {} : { margin: 0 }),
+					}}
+				>
 					{children}
 				</div>
 			)}

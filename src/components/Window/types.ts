@@ -7,6 +7,7 @@ export interface TitleBarProps {
 
 export interface WindowProps extends TitleBarProps {
 	children: JSX.Element
+	padding?: boolean
 }
 
 export type WindowState = 'opened' | 'closed' | 'minimized' | 'maximized'

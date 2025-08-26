@@ -1,6 +1,7 @@
 import { Paragraph } from '@components/Typography'
 import { Header } from '@components/Header'
 import { Window } from '@components/Window'
+import { Terminal } from '@components/Terminal'
 import { Blockquote } from '@components/Blockquote'
 import { Tabs } from '@components/Tabs'
 import { Columns } from '@components/Layout'
@@ -36,6 +37,7 @@ export default function Home() {
 	return (
 		<>
 			<Header />
+
 			<Window title={i18n.Homepage.aboutWindows98Theme.title[lang]}>
 				<>
 					<Paragraph>
@@ -74,10 +76,12 @@ export default function Home() {
 			<Blockquote>
 				<Paragraph>
 					{i18n.Homepage.linkedinBlockquote.text[lang]}
-					<a 
-						href='https://www.linkedin.com/in/felipe0liveira/' 
+					<a
+						href='https://www.linkedin.com/in/felipe0liveira/'
 						target='_blank'
-						onClick={() => trackEvent('external_link_click', 'social_media', 'linkedin')}
+						onClick={() =>
+							trackEvent('external_link_click', 'social_media', 'linkedin')
+						}
 					>
 						LinkedIn
 					</a>
@@ -108,10 +112,16 @@ export default function Home() {
 							<Blockquote>
 								<Paragraph>
 									{i18n.Homepage.githubBlockquote.text[lang]}
-									<a 
-										href='https://github.com/felipe0liveira' 
+									<a
+										href='https://github.com/felipe0liveira'
 										target='_blank'
-										onClick={() => trackEvent('external_link_click', 'social_media', 'github')}
+										onClick={() =>
+											trackEvent(
+												'external_link_click',
+												'social_media',
+												'github',
+											)
+										}
 									>
 										Github
 									</a>
@@ -122,6 +132,18 @@ export default function Home() {
 					</Window>
 				</Columns>
 			)}
+
+			<Terminal
+				title='Command Prompt (experimental feature)'
+				initialText={[
+					'Microsoft Windows 98 [Version 4.10.1998]',
+					'(C) Copyright Microsoft Corp 1981-1998.',
+					'',
+					'Welcome to my personal website terminal!',
+					'Type "help" for available commands.',
+					'',
+				]}
+			/>
 		</>
 	)
 }

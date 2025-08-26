@@ -13,3 +13,38 @@ body {
 button:disabled {
 	cursor: not-allowed;
 }
+
+/* Terminal specific styles */
+.terminal-container {
+	scrollbar-width: thin;
+	scrollbar-color: #c0c0c0 #000000;
+}
+
+/* Terminal text selection styling */
+.terminal-container ::selection {
+	background-color: #c0c0c0;
+	color: #000000;
+}
+
+.terminal-container ::-moz-selection {
+	background-color: #c0c0c0;
+	color: #000000;
+}
+
+.terminal-container::-webkit-scrollbar {
+	width: 16px;
+}
+
+.terminal-container::-webkit-scrollbar-track {
+	background: #c0c0c0;
+	border: 1px inset #c0c0c0;
+}
+
+.terminal-container::-webkit-scrollbar-thumb {
+	background: #808080;
+	border: 1px outset #808080;
+}
+
+.terminal-container::-webkit-scrollbar-thumb:hover {
+	background: #606060;
+}

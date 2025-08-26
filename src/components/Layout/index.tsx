@@ -5,11 +5,15 @@ export const Layout = styled.div`
 	justify-content: center;
 `
 export const Container = styled.main`
-	width: 900px;
+	width: 1200px;
 	max-width: 90%;
 	padding: 24px 0;
 	display: grid;
 	gap: 16px;
+
+	@media (min-width: 2800px) {
+	width: 2000px;
+	}
 `
 
 export const Columns = styled.div`
