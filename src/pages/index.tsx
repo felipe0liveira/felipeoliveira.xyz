@@ -73,28 +73,14 @@ export default function Home() {
 				</Window>
 			</Columns>
 
-			<Blockquote>
-				<Paragraph>
-					{i18n.Homepage.linkedinBlockquote.text[lang]}
-					<a
-						href='https://www.linkedin.com/in/felipe0liveira/'
-						target='_blank'
-						onClick={() =>
-							trackEvent('external_link_click', 'social_media', 'linkedin')
-						}
-					>
-						LinkedIn
-					</a>
-					.
-				</Paragraph>
-			</Blockquote>
-
 			<Tabs
 				tabs={i18n.Homepage.tabs.map((tab) => ({
 					title: tab.title[lang],
 					content: <Paragraph>{tab.description[lang]}</Paragraph>,
 				}))}
 			/>
+
+			<Terminal />
 
 			{githubData && (
 				<Columns>
@@ -132,8 +118,6 @@ export default function Home() {
 					</Window>
 				</Columns>
 			)}
-
-			<Terminal />
 		</>
 	)
 }
