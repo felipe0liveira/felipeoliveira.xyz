@@ -48,3 +48,32 @@ button:disabled {
 .terminal-container::-webkit-scrollbar-thumb:hover {
 	background: #606060;
 }
+
+/* Prevent zoom on mobile when focusing inputs */
+@media screen and (max-width: 768px) {
+	/* General rule for all inputs to prevent zoom */
+	input, textarea, select {
+		font-size: 16px !important;
+		-webkit-text-size-adjust: 100%;
+		transform: scale(1);
+	}
+	
+	.terminal-container {
+		font-size: 16px !important;
+		/* Adjust height for mobile screens */
+		height: 250px !important;
+	}
+	
+	.terminal-container input {
+		font-size: 16px !important;
+		/* Prevent iOS Safari zoom on input focus */
+		transform: scale(1);
+		-webkit-text-size-adjust: 100%;
+	}
+	
+	/* Improve touch targets on mobile */
+	.terminal-container {
+		-webkit-tap-highlight-color: transparent;
+		touch-action: manipulation;
+	}
+}
