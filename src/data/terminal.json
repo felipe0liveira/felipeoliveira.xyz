@@ -1,0 +1,45 @@
+{
+	"terminal": {
+		"config": {
+			"initialText": [
+				"Microsoft Windows 98 [Version 4.10.1998]",
+				"(C) Copyright Microsoft Corp 1981-1998.",
+				"",
+				"Welcome to Felipe's personal website terminal!",
+				"Type \"help\" for available commands.",
+				""
+			],
+			"prompt": "C:\\>",
+			"title": "Command Prompt"
+		},
+		"commands": {
+			"help": {
+				"output": "Available commands:\nDIR     - List directory contents\nCLS     - Clear screen\nDATE    - Display current date\nTIME    - Display current time\nVER     - Display version information\nECHO    - Display messages\nEXIT    - Close terminal\nWHOAMI  - Display current user information\nABOUT   - About this website"
+			},
+			"dir": {
+				"output": "Volume in drive C has no label.\nVolume Serial Number is 1234-ABCD\n\nDirectory of C:\\\n\n08/26/2025  10:30 AM    <DIR>          WINDOWS\n08/26/2025  09:15 AM    <DIR>          TEMP\n08/26/2025  08:45 AM         1,024 AUTOEXEC.BAT\n08/26/2025  08:45 AM           512 CONFIG.SYS\n08/26/2025  11:15 AM    <DIR>          PROJECTS\n08/26/2025  11:15 AM    <DIR>          PORTFOLIO\n               2 File(s)          1,536 bytes\n               4 Dir(s)   2,147,483,648 bytes free"
+			},
+			"cls": {
+				"clear": true
+			},
+			"ver": {
+				"output": "Microsoft Windows 98 [Version 4.10.1998]"
+			},
+			"whoami": {
+				"output": "FELIPE-PC\\felipe\n\nCurrent user: Felipe Oliveira\nRole: Full Stack Developer\nLocation: Brazil"
+			},
+			"about": {
+				"output": "Personal Website Terminal v1.0\n\nThis is Felipe Oliveira's personal website built with:\n- Next.js\n- TypeScript\n- Windows 98 UI Theme\n\nVisit: https://github.com/felipe0liveira\nLinkedIn: https://linkedin.com/in/felipe0liveira"
+			},
+			"exit": {
+				"output": "Goodbye! Thanks for visiting my website!"
+			}
+		},
+		"errors": {
+			"unknownCommand": "'{{command}}' is not recognized as an internal or external command,\noperable program or batch file.",
+			"apiError": "Error: Could not process command",
+			"networkError": "Error: Network connection failed",
+			"invalidCommand": "Command is required and must be a string"
+		}
+	}
+}

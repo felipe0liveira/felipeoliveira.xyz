@@ -133,17 +133,7 @@ export default function Home() {
 				</Columns>
 			)}
 
-			<Terminal
-				title='Command Prompt (experimental feature)'
-				initialText={[
-					'Microsoft Windows 98 [Version 4.10.1998]',
-					'(C) Copyright Microsoft Corp 1981-1998.',
-					'',
-					'Welcome to my personal website terminal!',
-					'Type "help" for available commands.',
-					'',
-				]}
-			/>
+			<Terminal />
 		</>
 	)
 }

@@ -2,19 +2,64 @@ import { useState, useRef, useEffect } from 'react'
 import { Window } from '../Window'
 import { TerminalProps, TerminalLine } from './types'
 
+interface ApiCommandResponse {
+	output?: string
+	error?: string
+	clear?: boolean
+}
+
+interface ApiInitialResponse {
+	initialText: string[]
+	prompt: string
+	title: string
+}
+
 export const Terminal = ({ 
-	title = 'MS-DOS Prompt', 
-	initialText = [],
-	prompt = 'C:\\>' 
+	title: propTitle,
+	initialText: propInitialText,
+	prompt: propPrompt
 }: TerminalProps) => {
-	const [lines, setLines] = useState<TerminalLine[]>([
-		...initialText.map(text => ({ type: 'output' as const, text })),
-		{ type: 'command', text: prompt }
-	])
+	const [lines, setLines] = useState<TerminalLine[]>([])
 	const [currentInput, setCurrentInput] = useState('')
 	const [cursorVisible, setCursorVisible] = useState(true)
+	const [prompt, setPrompt] = useState(propPrompt || 'C:\\>')
+	const [title, setTitle] = useState(propTitle || 'MS-DOS Prompt')
+	const [isLoading, setIsLoading] = useState(false)
 	const inputRef = useRef<HTMLInputElement>(null)
 	const terminalRef = useRef<HTMLDivElement>(null)
+
+	// Load initial configuration from API
+	useEffect(() => {
+		const loadInitialConfig = async () => {
+			try {
+				const response = await fetch('/api/command-prompt')
+				if (response.ok) {
+					const config: ApiInitialResponse = await response.json()
+					setPrompt(config.prompt)
+					setTitle(propTitle || config.title)
+					setLines([
+						...(propInitialText || config.initialText).map(text => ({ type: 'output' as const, text })),
+						{ type: 'command', text: config.prompt }
+					])
+				} else {
+					// Fallback to props if API fails
+					setLines([
+						...(propInitialText || []).map(text => ({ type: 'output' as const, text })),
+						{ type: 'command', text: prompt }
+					])
+				}
+			} catch (error) {
+				console.error('Failed to load terminal config:', error)
+				// Fallback to props if API fails
+				setLines([
+					...(propInitialText || []).map(text => ({ type: 'output' as const, text })),
+					{ type: 'command', text: prompt }
+				])
+			}
+		}
+
+		loadInitialConfig()
+	}, [propTitle, propInitialText, propPrompt, prompt])
 
 	// Cursor blinking effect
 	useEffect(() => {
@@ -31,17 +76,11 @@ export const Terminal = ({
 		}
 	}, [lines])
 
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
+	const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter' && !isLoading) {
 			const command = currentInput.trim()
+			setIsLoading(true)
 			
-			// Handle special commands that modify the entire terminal
-			if (command.toLowerCase() === 'cls') {
-				setLines([{ type: 'command', text: prompt }])
-				setCurrentInput('')
-				return
-			}
-
 			// Add the command line
 			const newLines = [...lines]
 			newLines[newLines.length - 1] = { 
@@ -49,70 +88,49 @@ export const Terminal = ({
 				text: `${prompt} ${command}` 
 			}
 
-			// Process command and add output
-			const output = processCommand(command)
-			if (output) {
-				newLines.push({ type: 'output', text: output })
-			}
-
-			// Add new prompt
-			newLines.push({ type: 'command', text: prompt })
-
-			setLines(newLines)
-			setCurrentInput('')
-		}
-	}
-
-	const processCommand = (command: string): string => {
-		const cmd = command.toLowerCase()
-		
-		switch (cmd) {
-			case 'help':
-				return `Available commands:
-DIR     - List directory contents
-CLS     - Clear screen
-DATE    - Display current date
-TIME    - Display current time
-VER     - Display version information
-ECHO    - Display messages
-EXIT    - Close terminal`
-			
-			case 'dir':
-				return `Volume in drive C has no label.
-Volume Serial Number is 1234-ABCD
-
-Directory of C:\\
-
-08/26/2025  10:30 AM    <DIR>          WINDOWS
-08/26/2025  09:15 AM    <DIR>          TEMP
-08/26/2025  08:45 AM         1,024 AUTOEXEC.BAT
-08/26/2025  08:45 AM           512 CONFIG.SYS
-               2 File(s)          1,536 bytes
-               2 Dir(s)   2,147,483,648 bytes free`
-			
-			case 'date':
-				return new Date().toLocaleDateString('en-US', {
-					weekday: 'long',
-					year: 'numeric',
-					month: 'long',
-					day: 'numeric'
+			try {
+				// Send command to API
+				const response = await fetch('/api/command-prompt', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ command })
 				})
-			
-			case 'time':
-				return `The current time is: ${new Date().toLocaleTimeString()}`
-			
-			case 'ver':
-				return 'Microsoft Windows 98 [Version 4.10.1998]'
-			
-			case 'exit':
-				return 'Goodbye!'
-			
-			default:
-				if (cmd.startsWith('echo ')) {
-					return command.substring(5)
+
+				if (response.ok) {
+					const result: ApiCommandResponse = await response.json()
+					
+					if (result.clear) {
+						// Handle cls command
+						setLines([{ type: 'command', text: prompt }])
+					} else {
+						// Add output to terminal
+						if (result.output) {
+							newLines.push({ type: 'output', text: result.output })
+						} else if (result.error) {
+							newLines.push({ type: 'error', text: result.error })
+						}
+
+						// Add new prompt
+						newLines.push({ type: 'command', text: prompt })
+						setLines(newLines)
+					}
+				} else {
+					// Handle API error
+					newLines.push({ type: 'error', text: 'Error: Could not process command' })
+					newLines.push({ type: 'command', text: prompt })
+					setLines(newLines)
 				}
-				return `'${command}' is not recognized as an internal or external command,
-operable program or batch file.`
+			} catch (error) {
+				// Handle network error
+				newLines.push({ type: 'error', text: 'Error: Network connection failed' })
+				newLines.push({ type: 'command', text: prompt })
+				setLines(newLines)
+			} finally {
+				setIsLoading(false)
+				setCurrentInput('')
+			}
 		}
 	}
 
@@ -165,11 +183,12 @@ operable program or batch file.`
 										value={currentInput}
 										onChange={(e) => setCurrentInput(e.target.value)}
 										onKeyDown={handleKeyDown}
+										disabled={isLoading}
 										style={{
 											backgroundColor: 'transparent',
 											border: 'none',
 											outline: 'none',
-											color: '#c0c0c0',
+											color: isLoading ? '#808080' : '#c0c0c0',
 											fontFamily: 'inherit',
 											fontSize: 'inherit',
 											width: `${Math.max(currentInput.length + 1, 1)}ch`,
@@ -182,20 +201,33 @@ operable program or batch file.`
 										}}
 										autoFocus
 									/>
-									<span 
-										style={{ 
-											position: 'absolute',
-											left: `${currentInput.length}ch`,
-											top: 0,
-                                            marginLeft: 5,
-											backgroundColor: cursorVisible ? '#c0c0c0' : 'transparent',
-											width: '1ch',
-											height: '100%',
-											display: 'inline-block',
-											zIndex: 0
-										}}
-									>
-									</span>
+									{!isLoading ? (
+										<span 
+											style={{ 
+												position: 'absolute',
+												left: `${currentInput.length}ch`,
+												top: 0,
+												backgroundColor: cursorVisible ? '#c0c0c0' : 'transparent',
+												width: '1ch',
+												height: '100%',
+												display: 'inline-block',
+												zIndex: 0
+											}}
+										>
+										</span>
+									) : (
+										<span 
+											style={{ 
+												position: 'absolute',
+												left: `${currentInput.length}ch`,
+												top: 0,
+												color: '#c0c0c0',
+												marginLeft: '4px'
+											}}
+										>
+											...
+										</span>
+									)}
 								</span>
 							</div>
 						) : (
