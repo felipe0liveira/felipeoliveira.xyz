@@ -8,18 +8,19 @@ import { Columns } from '@components/Layout'
 import { TableView } from '@components/TableView'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { request, getUserLanguage, trackEvent } from '@utils/index'
+import { getUserLanguage, trackEvent } from '@utils/index'
+import { useRepositories } from '@hooks/index'
 import * as i18n from '@locales/i18n'
 
 export default function Home() {
-	const [githubData, setGithubData] = useState<any[]>()
 	const [lang, setLang] = useState<'pt-BR' | 'en-US'>()
+	
+	const { data: githubData, loading, error } = useRepositories({
+		username: 'felipe0liveira',
+		enabled: true
+	})
 
 	useEffect(() => {
-		request('/api/github/felipe0liveira/repositories').then((data) =>
-			setGithubData(data),
-		)
-
 		const userLang = getUserLanguage() === 'pt-BR' ? 'pt-BR' : 'en-US'
 		setLang(userLang)
 
@@ -82,7 +83,7 @@ export default function Home() {
 
 			<Terminal />
 
-			{githubData && (
+			{githubData && !loading && !error && (
 				<Columns>
 					<Window title='Github'>
 						<>
@@ -117,6 +118,12 @@ export default function Home() {
 						</>
 					</Window>
 				</Columns>
+			)}
+
+			{loading && (
+				<Window title='Github'>
+					<Paragraph>Loading repositories...</Paragraph>
+				</Window>
 			)}
 		</>
 	)

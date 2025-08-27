@@ -16,7 +16,8 @@
 			"@/*": ["./src/*"],
 			"@utils/*": ["./src/utils/*"],
 			"@components/*": ["./src/components/*"],
-			"@locales/*": ["./src/locales/*"]
+			"@locales/*": ["./src/locales/*"],
+			"@hooks/*": ["./src/hooks/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
