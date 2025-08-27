@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import { WindowProps, WindowState } from './types'
 import { trackEvent } from '../../utils/analytics'

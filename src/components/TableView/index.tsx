@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+'use client'
+
 import { TableViewProps } from './types'
 
 export const TableView = ({ list, heading }: TableViewProps) => {
@@ -7,16 +8,16 @@ export const TableView = ({ list, heading }: TableViewProps) => {
 			<table className='interactive'>
 				<thead>
 					<tr>
-						{heading.map((h) => (
-							<th key={h.key}>{h.title}</th>
+						{heading.map((h, index) => (
+							<th key={`${h.key}-${index}`}>{h.title}</th>
 						))}
 					</tr>
 				</thead>
 				<tbody>
-					{list.map((item) => (
-						<tr key={item.id} style={{ cursor: 'unset' }}>
-							{heading.map((h) => (
-								<td key={item.id}>
+					{list.map((item, itemIndex) => (
+						<tr key={item.id || `item-${itemIndex}`} style={{ cursor: 'unset' }}>
+							{heading.map((h, headingIndex) => (
+								<td key={`${itemIndex}-${headingIndex}`}>
 									{h.link ? (
 										<a href={item[h.key]} target='_blank'>
 											{h.label}

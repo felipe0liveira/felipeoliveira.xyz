@@ -11,18 +11,18 @@
   "dependencies": {
     "98.css": "^0.1.20",
     "@google-cloud/firestore": "^7.11.3",
-    "next": "14.2.7",
-    "react": "^18",
-    "react-dom": "^18",
+    "next": "^15.5.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.11",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.7",
+    "eslint-config-next": "^15.5.2",
     "prettier": "^3.3.3",
-    "typescript": "^5"
+    "typescript": "^5.9.2"
   }
 }

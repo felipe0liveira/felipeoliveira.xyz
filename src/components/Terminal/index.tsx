@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useRef, useEffect } from 'react'
 import { Window } from '../Window'
 import { TerminalProps } from './types'

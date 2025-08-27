@@ -1,18 +1,20 @@
-import { Paragraph } from '@components/Typography'
-import { Header } from '@components/Header'
-import { Window } from '@components/Window'
-import { Terminal } from '@components/Terminal'
-import { Blockquote } from '@components/Blockquote'
-import { Tabs } from '@components/Tabs'
-import { Columns } from '@components/Layout'
-import { TableView } from '@components/TableView'
+'use client'
+
+import { Paragraph } from '@/components/Typography'
+import { Header } from '@/components/Header'
+import { Window } from '@/components/Window'
+import { Terminal } from '@/components/Terminal'
+import { Blockquote } from '@/components/Blockquote'
+import { Tabs } from '@/components/Tabs'
+import { Columns, Layout, Container } from '@/components/Layout'
+import { TableView } from '@/components/TableView'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { getUserLanguage, trackEvent } from '@utils/index'
-import { useRepositories } from '@hooks/index'
-import * as i18n from '@locales/i18n'
+import { getUserLanguage, trackEvent } from '@/lib/index'
+import { useRepositories } from '@/hooks/index'
+import * as i18n from '@/locales/i18n'
 
-export default function Home() {
+export function HomePageClient() {
 	const [lang, setLang] = useState<'pt-BR' | 'en-US'>()
 	
 	const { data: githubData, loading, error } = useRepositories({
@@ -36,18 +38,19 @@ export default function Home() {
 		)
 
 	return (
-		<>
-			<Header />
+		<Layout>
+			<Container>
+				<Header />
 
-			<Window title={i18n.Homepage.aboutWindows98Theme.title[lang]}>
-				<>
-					<Paragraph>
-						{i18n.Homepage.aboutWindows98Theme.description[lang]}
-					</Paragraph>
-				</>
-			</Window>
+				<Window title={i18n.Homepage.aboutWindows98Theme.title[lang]}>
+					<>
+						<Paragraph>
+							{i18n.Homepage.aboutWindows98Theme.description[lang]}
+						</Paragraph>
+					</>
+				</Window>
 
-			<Columns>
+				<Columns>
 				<Window title={i18n.Homepage.thatsMe.title[lang]}>
 					<>
 						<Image
@@ -125,6 +128,7 @@ export default function Home() {
 					<Paragraph>Loading repositories...</Paragraph>
 				</Window>
 			)}
-		</>
+			</Container>
+		</Layout>
 	)
 }

@@ -8,6 +8,14 @@
 
 body {
 	background-color: #c0c0c0;
+	font-family: 'Handjet', monospace;
+}
+
+.test-class {
+	background-color: blue;
+	color: yellow;
+	padding: 10px;
+	margin: 10px 0;
 }
 
 button:disabled {

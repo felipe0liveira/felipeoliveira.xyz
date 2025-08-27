@@ -1,3 +1,5 @@
+'use client'
+
 import { Divider } from '@components/Divider'
 import { Heading1, Heading2, Paragraph } from '@components/Typography'
 import { Blockquote } from '@components/Blockquote'

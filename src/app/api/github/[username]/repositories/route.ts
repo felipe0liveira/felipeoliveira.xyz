@@ -1,37 +1,38 @@
 import { GithubRepository } from '@/types/github'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 
-type Response = [
-	{
-		name: string
-		description: string
-		stargazersCount: number
-		size: string
-		url: string
-	},
-]
+type Response = Array<{
+	name: string
+	description: string
+	stargazersCount: number
+	size: string
+	url: string
+}>
 
 type ErrorResponse = {
 	error: string
 	details?: string
 }
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<Response | ErrorResponse>,
+export async function GET(
+	request: NextRequest,
+	{ params }: { params: Promise<{ username: string }> }
 ) {
 	try {
-		const username = req.query.username as string
+		const { username } = await params
 
 		// Validate username parameter
 		if (!username || typeof username !== 'string') {
 			console.error('GitHub API Error: Missing or invalid username parameter', {
 				username,
-				query: req.query
+				params
 			})
-			return res.status(400).json({ 
-				error: 'Username parameter is required and must be a string' 
-			})
+			return NextResponse.json(
+				{ 
+					error: 'Username parameter is required and must be a string' 
+				},
+				{ status: 400 }
+			)
 		}
 
 		console.log(`Fetching GitHub repositories for user: ${username}`)
@@ -61,25 +62,37 @@ export default async function handler(
 			// Handle specific GitHub API errors
 			switch (response.status) {
 				case 404:
-					return res.status(404).json({ 
-						error: 'User not found',
-						details: `GitHub user '${username}' does not exist`
-					})
+					return NextResponse.json(
+						{ 
+							error: 'User not found',
+							details: `GitHub user '${username}' does not exist`
+						},
+						{ status: 404 }
+					)
 				case 403:
-					return res.status(403).json({ 
-						error: 'Rate limit exceeded or access forbidden',
-						details: 'GitHub API rate limit reached or repository access denied'
-					})
+					return NextResponse.json(
+						{ 
+							error: 'Rate limit exceeded or access forbidden',
+							details: 'GitHub API rate limit reached or repository access denied'
+						},
+						{ status: 403 }
+					)
 				case 401:
-					return res.status(401).json({ 
-						error: 'Unauthorized',
-						details: 'GitHub API authentication failed'
-					})
+					return NextResponse.json(
+						{ 
+							error: 'Unauthorized',
+							details: 'GitHub API authentication failed'
+						},
+						{ status: 401 }
+					)
 				default:
-					return res.status(response.status).json({ 
-						error: 'GitHub API error',
-						details: `HTTP ${response.status}: ${response.statusText}`
-					})
+					return NextResponse.json(
+						{ 
+							error: 'GitHub API error',
+							details: `HTTP ${response.status}: ${response.statusText}`
+						},
+						{ status: response.status }
+					)
 			}
 		}
 
@@ -92,39 +105,46 @@ export default async function handler(
 				dataType: typeof data,
 				data
 			})
-			return res.status(500).json({ 
-				error: 'Invalid response format from GitHub API',
-				details: 'Expected an array of repositories'
-			})
+			return NextResponse.json(
+				{ 
+					error: 'Invalid response format from GitHub API',
+					details: 'Expected an array of repositories'
+				},
+				{ status: 500 }
+			)
 		}
 
 		console.log(`Successfully fetched ${data.length} repositories for user: ${username}`)
 
 		// Transform and return the data
-		const transformedData = data.map((repo) => ({
+		const transformedData: Response = data.map((repo) => ({
 			name: repo.name,
 			description: repo.description || 'No description available',
 			stargazersCount: repo.stargazers_count,
 			size: `${repo.size} KB`,
 			url: repo.html_url,
-		})) as Response
+		}))
 
-		res.status(200).json(transformedData)
+		return NextResponse.json(transformedData)
 
 	} catch (error) {
 		// Catch any unexpected errors
+		const { username: usernameFromParams } = await params
 		console.error('Unexpected error in GitHub repositories API:', {
 			error: error instanceof Error ? error.message : String(error),
 			stack: error instanceof Error ? error.stack : undefined,
-			username: req.query.username,
-			url: req.url,
-			method: req.method,
+			username: usernameFromParams,
+			url: request.url,
+			method: request.method,
 			timestamp: new Date().toISOString()
 		})
 
-		res.status(500).json({ 
-			error: 'Internal server error',
-			details: 'An unexpected error occurred while fetching repositories'
-		})
+		return NextResponse.json(
+			{ 
+				error: 'Internal server error',
+				details: 'An unexpected error occurred while fetching repositories'
+			},
+			{ status: 500 }
+		)
 	}
 }

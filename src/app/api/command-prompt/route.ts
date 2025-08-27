@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import terminalData from '../../../data/terminal.json'
-import asciiData from '../../../data/ascii.json'
-import type { TerminalCommand, TerminalConfig } from '../../../types/terminal'
+import { NextRequest, NextResponse } from 'next/server'
+import terminalData from '@/data/terminal.json'
+import asciiData from '@/data/ascii.json'
+import type { TerminalCommand, TerminalConfig } from '@/types/terminal'
 
 interface CommandResponse extends TerminalCommand {}
 
@@ -64,32 +64,34 @@ const processCommand = (command: string): CommandResponse => {
 	}
 }
 
-export default function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<CommandResponse | InitialPromptResponse>
-) {
-	if (req.method === 'GET') {
-		// Return initial prompt configuration from JSON
-		const initialResponse: InitialPromptResponse = {
-			initialText: terminalData.terminal.config.initialText,
-			prompt: terminalData.terminal.config.prompt,
-			title: terminalData.terminal.config.title
-		}
-		
-		res.status(200).json(initialResponse)
-	} else if (req.method === 'POST') {
-		// Process command
-		const { command } = req.body
+export async function GET() {
+	// Return initial prompt configuration from JSON
+	const initialResponse: InitialPromptResponse = {
+		initialText: terminalData.terminal.config.initialText,
+		prompt: terminalData.terminal.config.prompt,
+		title: terminalData.terminal.config.title
+	}
+	
+	return NextResponse.json(initialResponse)
+}
+
+export async function POST(request: NextRequest) {
+	try {
+		const { command } = await request.json()
 		
 		if (!command || typeof command !== 'string') {
-			res.status(400).json({ error: terminalData.terminal.errors.invalidCommand })
-			return
+			return NextResponse.json(
+				{ error: terminalData.terminal.errors.invalidCommand },
+				{ status: 400 }
+			)
 		}
 		
 		const result = processCommand(command.trim())
-		res.status(200).json(result)
-	} else {
-		res.setHeader('Allow', ['GET', 'POST'])
-		res.status(405).end(`Method ${req.method} Not Allowed`)
+		return NextResponse.json(result)
+	} catch (error) {
+		return NextResponse.json(
+			{ error: 'Invalid JSON request' },
+			{ status: 400 }
+		)
 	}
 }
