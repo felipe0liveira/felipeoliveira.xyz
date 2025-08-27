@@ -1,90 +1,30 @@
 import { useState, useRef, useEffect } from 'react'
 import { Window } from '../Window'
-import { TerminalProps, TerminalLine } from './types'
-import { trackEvent } from '../../utils/analytics'
-
-interface ApiCommandResponse {
-	output?: string
-	error?: string
-	clear?: boolean
-}
-
-interface ApiInitialResponse {
-	initialText: string[]
-	prompt: string
-	title: string
-}
+import { TerminalProps } from './types'
+import { useCommandPrompt } from '@hooks/index'
 
 export const Terminal = ({ 
 	title: propTitle,
 	initialText: propInitialText,
 	prompt: propPrompt
 }: TerminalProps) => {
-	const [lines, setLines] = useState<TerminalLine[]>([])
 	const [currentInput, setCurrentInput] = useState('')
 	const [cursorVisible, setCursorVisible] = useState(true)
-	const [prompt, setPrompt] = useState(propPrompt || 'C:\\>')
-	const [title, setTitle] = useState(propTitle || 'MS-DOS Prompt')
-	const [isLoading, setIsLoading] = useState(false)
 	const inputRef = useRef<HTMLInputElement>(null)
 	const terminalRef = useRef<HTMLDivElement>(null)
 
-	// Load initial configuration from API
-	useEffect(() => {
-		const loadInitialConfig = async () => {
-			try {
-				const response = await fetch('/api/command-prompt')
-				if (response.ok) {
-					const config: ApiInitialResponse = await response.json()
-					setPrompt(config.prompt)
-					setTitle(propTitle || config.title)
-					setLines([
-						...(propInitialText || config.initialText).map(text => ({ type: 'output' as const, text })),
-						{ type: 'command', text: config.prompt }
-					])
-					
-					// Track terminal initialization
-					trackEvent(
-						'terminal_initialized',
-						'Terminal Interaction',
-						'success',
-						1
-					)
-				} else {
-					// Fallback to props if API fails
-					setLines([
-						...(propInitialText || []).map(text => ({ type: 'output' as const, text })),
-						{ type: 'command', text: prompt }
-					])
-					
-					// Track terminal initialization with fallback
-					trackEvent(
-						'terminal_initialized',
-						'Terminal Interaction',
-						'fallback',
-						1
-					)
-				}
-			} catch (error) {
-				console.error('Failed to load terminal config:', error)
-				// Fallback to props if API fails
-				setLines([
-					...(propInitialText || []).map(text => ({ type: 'output' as const, text })),
-					{ type: 'command', text: prompt }
-				])
-				
-				// Track terminal initialization error
-				trackEvent(
-					'terminal_initialization_error',
-					'Terminal Error',
-					'config_load_failed',
-					1
-				)
-			}
-		}
-
-		loadInitialConfig()
-	}, [propTitle, propInitialText, propPrompt, prompt])
+	// Use the command prompt hook
+	const {
+		lines,
+		prompt,
+		title,
+		isLoading,
+		executeCommand
+	} = useCommandPrompt({
+		initialText: propInitialText,
+		prompt: propPrompt,
+		title: propTitle
+	})
 
 	// Cursor blinking effect
 	useEffect(() => {
@@ -104,106 +44,8 @@ export const Terminal = ({
 	const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter' && !isLoading) {
 			const command = currentInput.trim()
-			setIsLoading(true)
-			
-			// Track command usage with Google Analytics
-			trackEvent(
-				'terminal_command_executed',
-				'Terminal Interaction',
-				command.toLowerCase(),
-				1
-			)
-			
-			// Add the command line
-			const newLines = [...lines]
-			newLines[newLines.length - 1] = { 
-				type: 'command', 
-				text: `${prompt} ${command}` 
-			}
-
-			try {
-				// Send command to API
-				const response = await fetch('/api/command-prompt', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ command })
-				})
-
-				if (response.ok) {
-					const result: ApiCommandResponse = await response.json()
-					
-					if (result.clear) {
-						// Handle cls command
-						setLines([{ type: 'command', text: prompt }])
-						
-						// Track cls command specifically
-						trackEvent(
-							'terminal_screen_cleared',
-							'Terminal Interaction',
-							'cls',
-							1
-						)
-					} else {
-						// Add output to terminal
-						if (result.output) {
-							newLines.push({ type: 'output', text: result.output })
-							
-							// Track successful command execution
-							trackEvent(
-								'terminal_command_success',
-								'Terminal Interaction',
-								command.toLowerCase().split(' ')[0],
-								1
-							)
-						} else if (result.error) {
-							newLines.push({ type: 'error', text: result.error })
-							
-							// Track command errors (unknown commands, etc.)
-							trackEvent(
-								'terminal_command_error',
-								'Terminal Interaction',
-								command.toLowerCase().split(' ')[0],
-								1
-							)
-						}
-
-						// Add new prompt
-						newLines.push({ type: 'command', text: prompt })
-						setLines(newLines)
-					}
-				} else {
-					// Handle API error
-					newLines.push({ type: 'error', text: 'Error: Could not process command' })
-					newLines.push({ type: 'command', text: prompt })
-					setLines(newLines)
-					
-					// Track API errors
-					trackEvent(
-						'terminal_api_error',
-						'Terminal Error',
-						`command: ${command.toLowerCase().split(' ')[0]}, status: ${response.status}`,
-						1
-					)
-				}
-			} catch (error) {
-				// Handle network error
-				newLines.push({ type: 'error', text: 'Error: Network connection failed' })
-				newLines.push({ type: 'command', text: prompt })
-				setLines(newLines)
-				
-				// Track network errors
-				trackEvent(
-					'terminal_network_error',
-					'Terminal Error',
-					`command: ${command.toLowerCase().split(' ')[0]}`,
-					1
-				)
-			} finally {
-				setIsLoading(false)
-				setCurrentInput('')
-			}
+			await executeCommand(command)
+			setCurrentInput('')
 		}
 	}
 
