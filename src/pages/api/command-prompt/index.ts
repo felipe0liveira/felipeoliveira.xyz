@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import terminalData from '../../../data/terminal.json'
+import asciiData from '../../../data/ascii.json'
 import type { TerminalCommand, TerminalConfig } from '../../../types/terminal'
 
 interface CommandResponse extends TerminalCommand {}
@@ -38,6 +39,22 @@ const processCommand = (command: string): CommandResponse => {
 	if (cmd.startsWith('echo ')) {
 		return {
 			output: command.substring(5)
+		}
+	}
+	
+	// Handle ascii commands
+	if (cmd.startsWith('ascii ')) {
+		const asciiType = cmd.substring(6).trim()
+		
+		if (asciiType in asciiData.ascii) {
+			const asciiArt = asciiData.ascii[asciiType as keyof typeof asciiData.ascii]
+			return {
+				output: asciiArt.join('\n')
+			}
+		} else {
+			return {
+				error: `ASCII art for "${asciiType}" not found. Available options: ${Object.keys(asciiData.ascii).join(', ')}`
+			}
 		}
 	}
 	

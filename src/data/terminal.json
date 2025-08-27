@@ -14,7 +14,7 @@
 		},
 		"commands": {
 			"help": {
-				"output": "Available commands:\nDIR     - List directory contents\nCLS     - Clear screen\nDATE    - Display current date\nTIME    - Display current time\nVER     - Display version information\nECHO    - Display messages\nEXIT    - Close terminal\nWHOAMI  - Display current user information\nABOUT   - About this website"
+				"output": "Available commands:\nDIR     - List directory contents\nCLS     - Clear screen\nDATE    - Display current date\nTIME    - Display current time\nVER     - Display version information\nECHO    - Display messages\nASCII   - Display ASCII art (usage: ascii <type>)\nEXIT    - Close terminal\nWHOAMI  - Display current user information\nABOUT   - About this website"
 			},
 			"dir": {
 				"output": "Volume in drive C has no label.\nVolume Serial Number is 1234-ABCD\n\nDirectory of C:\\\n\n08/26/2025  10:30 AM    <DIR>          WINDOWS\n08/26/2025  09:15 AM    <DIR>          TEMP\n08/26/2025  08:45 AM         1,024 AUTOEXEC.BAT\n08/26/2025  08:45 AM           512 CONFIG.SYS\n08/26/2025  11:15 AM    <DIR>          PROJECTS\n08/26/2025  11:15 AM    <DIR>          PORTFOLIO\n               2 File(s)          1,536 bytes\n               4 Dir(s)   2,147,483,648 bytes free"
