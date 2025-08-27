@@ -35,6 +35,13 @@ export const Terminal = ({
 		if (e.key === 'Enter') {
 			const command = currentInput.trim()
 			
+			// Handle special commands that modify the entire terminal
+			if (command.toLowerCase() === 'cls') {
+				setLines([{ type: 'command', text: prompt }])
+				setCurrentInput('')
+				return
+			}
+
 			// Add the command line
 			const newLines = [...lines]
 			newLines[newLines.length - 1] = { 
@@ -82,10 +89,6 @@ Directory of C:\\
 08/26/2025  08:45 AM           512 CONFIG.SYS
                2 File(s)          1,536 bytes
                2 Dir(s)   2,147,483,648 bytes free`
-			
-			case 'cls':
-				setLines([{ type: 'command', text: prompt }])
-				return ''
 			
 			case 'date':
 				return new Date().toLocaleDateString('en-US', {
