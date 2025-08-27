@@ -1,0 +1,31 @@
+{
+  "name": "Felipe Oliveira - Full Stack Developer",
+  "short_name": "Felipe Oliveira",
+  "description": "Portfolio of Felipe Oliveira, Full Stack Developer specializing in modern web technologies",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#c0c0c0",
+  "theme_color": "#c0c0c0",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "business",
+    "productivity",
+    "education"
+  ],
+  "lang": "en",
+  "dir": "ltr"
+}
