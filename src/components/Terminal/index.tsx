@@ -18,7 +18,6 @@ export const Terminal = ({
 	// Use the command prompt hook
 	const {
 		lines,
-		prompt,
 		title,
 		isLoading,
 		executeCommand
@@ -35,13 +34,6 @@ export const Terminal = ({
 		}, 530)
 		return () => clearInterval(interval)
 	}, [])
-
-	// Auto-scroll to bottom when new lines are added
-	useEffect(() => {
-		if (terminalRef.current) {
-			terminalRef.current.scrollTop = terminalRef.current.scrollHeight
-		}
-	}, [lines])
 
 	const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter' && !isLoading) {
