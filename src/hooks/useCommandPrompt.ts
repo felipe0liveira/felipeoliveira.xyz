@@ -39,28 +39,12 @@ export const useCommandPrompt = ({
 					...(propInitialText || config.initialText).map(text => ({ type: 'output' as const, text })),
 					{ type: 'command', text: config.prompt }
 				])
-				
-				// Track terminal initialization
-				trackEvent(
-					'terminal_initialized',
-					'Terminal Interaction',
-					'success',
-					1
-				)
 			} else {
 				// Fallback to props if API fails
 				setLines([
 					...(propInitialText || []).map(text => ({ type: 'output' as const, text })),
 					{ type: 'command', text: prompt }
 				])
-				
-				// Track terminal initialization with fallback
-				trackEvent(
-					'terminal_initialized',
-					'Terminal Interaction',
-					'fallback',
-					1
-				)
 			}
 		} catch (error) {
 			console.error('Failed to load terminal config:', error)
