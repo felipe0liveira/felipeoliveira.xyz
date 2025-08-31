@@ -81,12 +81,18 @@ export function HomePageClient() {
 					</Window>
 				</Columns>
 
-				<Tabs
-					tabs={i18n.Homepage.tabs.map((tab) => ({
-						title: tab.title[lang],
-						content: <Paragraph>{tab.description[lang]}</Paragraph>,
-					}))}
-				/>
+				<Window title={i18n.Homepage.tabs.title[lang]}>
+					<>
+						<Paragraph>{i18n.Homepage.tabs.description[lang]}</Paragraph>
+						<hr />
+						<Tabs
+							tabs={i18n.Homepage.tabs.items.map((tab) => ({
+								title: tab.title[lang],
+								content: <Paragraph>{tab.description[lang]}</Paragraph>,
+							}))}
+						/>
+					</>
+				</Window>
 
 				<Terminal />
 
