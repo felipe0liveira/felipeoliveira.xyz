@@ -1,4 +1,4 @@
-import { HomePageClient } from './home'
+import { HomePageClient } from './templates/home'
 
 export default function HomePage() {
   return (
