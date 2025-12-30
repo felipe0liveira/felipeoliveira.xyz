@@ -14,6 +14,18 @@ steps:
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/websites/public:latest'
       - .
 
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'services'
+      - 'update'
+      - 'website'
+      - '--image'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/websites/public:latest'
+      - '--region'
+      - 'us-east1'
+
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/websites/public:latest'
 
