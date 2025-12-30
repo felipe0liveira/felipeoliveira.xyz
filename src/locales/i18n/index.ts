@@ -69,8 +69,20 @@ export const Homepage = {
 		items: [
 			{
 				title: {
-					'pt-BR': 'Desenvolvedor Frontend',
-					'en-US': 'Frontend Developer',
+					'pt-BR': 'Engenheiro de IA',
+					'en-US': 'AI Engineer',
+				},
+				description: {
+					'pt-BR':
+						'Como Engenheiro de IA, foco na construção de sistemas inteligentes e agentes autônomos escaláveis. Tenho experiência avançada no uso do Google AI SDK para integração de LLMs e na implementação de comunicação Agent-to-Agent (A2A) dentro do ecossistema GCP, permitindo a orquestração complexa de fluxos de trabalho. Além disso, utilizo o Model Context Protocol (MCP Server) para o consumo padronizado de APIs, garantindo que modelos de IA acessem dados externos de forma segura e contextualizada. Meu trabalho envolve desde o ajuste de prompts até a arquitetura de soluções que utilizam ferramentas de busca e execução de funções para expandir as capacidades cognitivas das aplicações.',
+					'en-US':
+						'As an AI Engineer, I focus on building intelligent systems and scalable autonomous agents. I have advanced experience using the Google AI SDK for LLM integration and implementing Agent-to-Agent (A2A) communication within the GCP ecosystem, enabling complex workflow orchestration. Additionally, I utilize the Model Context Protocol (MCP Server) for standardized API consumption, ensuring AI models access external data securely and with high context relevance. My work ranges from prompt engineering to architecting solutions that leverage tool use and function calling to expand the cognitive capabilities of applications.',
+				},
+			},
+			{
+				title: {
+					'pt-BR': 'Engenheiro Frontend',
+					'en-US': 'Frontend Engineer',
 				},
 				description: {
 					'pt-BR':
@@ -81,8 +93,8 @@ export const Homepage = {
 			},
 			{
 				title: {
-					'pt-BR': 'Desenvolvedor Backend',
-					'en-US': 'Backend Developer',
+					'pt-BR': 'Engenheiro Backend',
+					'en-US': 'Backend Engineer',
 				},
 				description: {
 					'pt-BR':
@@ -93,8 +105,8 @@ export const Homepage = {
 			},
 			{
 				title: {
-					'pt-BR': 'Desenvolvedor Fullstack',
-					'en-US': 'Fullstack Developer',
+					'pt-BR': 'Engenheiro Fullstack',
+					'en-US': 'Fullstack Engineer',
 				},
 				description: {
 					'pt-BR':
