@@ -68,10 +68,13 @@ export default function ContributionSection() {
               <div className="w-3 h-3 rounded-full bg-lemon-500"></div>
               <div className="w-3 h-3 rounded-full bg-gray-600"></div>
             </div>
-            <div className="font-mono text-xs text-gray-500">
+            <div className="font-mono text-xs text-gray-500 hidden sm:block">
               github:~$ fetch user/felipe0liveira
             </div>
-            <div className="w-16"></div>
+            <div className="font-mono text-xs text-gray-500 sm:hidden flex-1 text-center">
+              fetch user
+            </div>
+            <div className="w-4 sm:w-16"></div>
           </div>
 
           {/* Terminal Body */}
@@ -83,11 +86,13 @@ export default function ContributionSection() {
           >
             {/* Command Prompt */}
             <div className="mb-6">
-              <span className="text-lemon-500">root@github</span>
-              <span className="text-gray-500">:</span>
-              <span className="text-pink-500">~</span>
-              <span className="text-gray-500">$</span>
-              <span className="text-white ml-2">fetch_developer_profile</span>
+              <div className="flex flex-wrap items-center gap-x-1">
+                <span className="text-lemon-500">root@github</span>
+                <span className="text-gray-500">:</span>
+                <span className="text-pink-500">~</span>
+                <span className="text-gray-500">$</span>
+                <span className="text-white ml-2 break-all">fetch_developer_profile</span>
+              </div>
             </div>
 
             {/* Loading Animation */}
@@ -115,7 +120,7 @@ export default function ContributionSection() {
                       <div className="text-lemon-500 text-xl font-bold mb-2">{profile.name}</div>
                       {profile.company && (
                         <div className="text-gray-400 mb-1">
-                          <span className="text-pink-500">@</span> {profile.company}
+                          <span className="text-pink-500">🏢</span> {profile.company}
                         </div>
                       )}
                       {profile.location && (
@@ -180,11 +185,13 @@ export default function ContributionSection() {
 
               {/* Command Prompt End */}
               <div className="pt-4">
-                <span className="text-lemon-500">root@github</span>
-                <span className="text-gray-500">:</span>
-                <span className="text-pink-500">~</span>
-                <span className="text-gray-500">$</span>
-                <span className="text-white ml-2 animate-pulse">_</span>
+                <div className="flex flex-wrap items-center gap-x-1">
+                  <span className="text-lemon-500">root@github</span>
+                  <span className="text-gray-500">:</span>
+                  <span className="text-pink-500">~</span>
+                  <span className="text-gray-500">$</span>
+                  <span className="text-white ml-2 animate-pulse">_</span>
+                </div>
               </div>
             </div>
           </div>
