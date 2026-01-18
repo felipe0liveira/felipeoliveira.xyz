@@ -27,9 +27,12 @@ I am committed to ensuring software quality through rigorous testing. I use tool
 ## Cloud Operations & CI/CD
 As an Engineer, I design and implement automated pipelines that ensure seamless software delivery across multi-cloud environments. I have extensive experience orchestrating GitHub Actions to automate testing and deployment workflows, alongside configuring Google Cloud Build with specialized Triggers for efficient CI/CD within the GCP ecosystem. My expertise includes managing scalable workloads on AWS and containerizing applications with Docker, focusing on building resilient infrastructure that supports high-frequency releases with maximum stability and security.
 
-## Projects and Customers
+# Projects and Customers
 
 PASeguros: https://paseguros.com.br - A comprehensive insurance platform offering various insurance products with an intuitive user interface and seamless experience.
 Bruna Cruz (English Teacher): https://englishprof.brunabcruz.com.br - A personal website for an English teacher, featuring course offerings, scheduling, and resources for students.
 KLS Eventos (in development): https://klseventos.com.br - An event management platform designed to streamline event planning, ticketing, and attendee engagement.
 Plie Croche: http://pliecroche.com/ - A Landing page for promoting crochet products and workshops, showcasing designs and facilitating customer inquiries.
+
+# GitHub & Professional Contribution
+As an Engineer, I have spent the majority of my career operating within GitHub ecosystems to drive collaboration and maintain code quality at scale. My profile reflects a track record of high-frequency contributions across large-scale corporate repositories, where I have led feature development, conducted rigorous code reviews, and managed complex branch strategies. Beyond professional projects, I utilize my GitHub presence to document my journey in AI Engineering, sharing implementations of MCP Servers, autonomous agents, and fullstack experiments. This public log serves as a testament to my commitment to clean code, architectural consistency, and the continuous evolution of the software engineering craft.
