@@ -47,7 +47,7 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 substitutions:
-  _IMAGE_BASE: us-east1-docker.pkg.dev/felipeoliveira-xyz-483617/cloud-run-source-deploy/felipeoliveira.xyz
+  _IMAGE_BASE: us-east1-docker.pkg.dev/felipeoliveira-xyz/cloud-run-source-deploy/felipeoliveira.xyz
 
 tags:
   - github
