@@ -1,18 +1,31 @@
 @import 'tailwindcss';
 
 @theme inline {
-  /* Orange colors */
-  --color-orange-50: #fff7ed;
-  --color-orange-100: #ffedd5;
-  --color-orange-200: #fed7aa;
-  --color-orange-300: #fdba74;
-  --color-orange-400: #fb923c;
-  --color-orange-500: #f57f24; /* Main color */
-  --color-orange-600: #ea580c;
-  --color-orange-700: #c2410c;
-  --color-orange-800: #9a3412;
-  --color-orange-900: #7c2d12;
-  --color-orange-950: #431407;
+  /* Lemon Palette - Vibrant & Acidic */
+  --color-lemon-50: #faffeb;
+  --color-lemon-100: #f2ffc7;
+  --color-lemon-200: #e3ff94;
+  --color-lemon-300: #d4ff57;
+  --color-lemon-400: #ccff29;
+  --color-lemon-500: #c3ff00; /* Main Lemon color */
+  --color-lemon-600: #a3d600;
+  --color-lemon-700: #7ba100;
+  --color-lemon-800: #617f00;
+  --color-lemon-900: #506800;
+  --color-lemon-950: #2a3800;
+
+  /* Pink Palette - Electric & Bold */
+  --color-pink-50: #fff0f7;
+  --color-pink-100: #ffe3f1;
+  --color-pink-200: #ffc7e5;
+  --color-pink-300: #ff99cf;
+  --color-pink-400: #ff5cad;
+  --color-pink-500: #ff0087; /* Main Pink color */
+  --color-pink-600: #e6007a;
+  --color-pink-700: #bf0065;
+  --color-pink-800: #9e0054;
+  --color-pink-900: #820045;
+  --color-pink-950: #52002b;
 
   /* Animations */
   --animate-fadeIn: fadeIn 0.2s ease-in;
