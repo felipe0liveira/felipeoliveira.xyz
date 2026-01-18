@@ -50,13 +50,18 @@ const skills: Skill[] = [
 
 export default function SkillsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handlePrev = () => {
+    setIsTransitioning(true);
     setCurrentIndex((prev) => (prev === 0 ? skills.length - 1 : prev - 1));
+    setTimeout(() => setIsTransitioning(false), 300);
   };
 
   const handleNext = () => {
+    setIsTransitioning(true);
     setCurrentIndex((prev) => (prev === skills.length - 1 ? 0 : prev + 1));
+    setTimeout(() => setIsTransitioning(false), 300);
   };
 
   const getVisibleSkills = () => {
@@ -132,6 +137,7 @@ export default function SkillsSection() {
                     hover:shadow-2xl
                     ${idx === 1 ? 'hidden lg:block' : ''}
                     ${idx === 2 ? 'hidden lg:block' : ''}
+                    ${isTransitioning ? 'animate-[glitch_0.3s_ease-in-out]' : ''}
                   `}
                   style={{
                     boxShadow: skill.color === 'lemon'
