@@ -1,0 +1,53 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - '--no-cache'
+      - '-t'
+      - '$_IMAGE_BASE:$COMMIT_SHA'
+      - '-t'
+      - '$_IMAGE_BASE:sandbox'
+      - .
+      - '-f'
+      - Dockerfile
+    id: Build
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - '--all-tags'
+      - '$_IMAGE_BASE'
+    id: Push
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    args:
+      - run
+      - deploy
+      - sandbox-felipeoliveira-xyz
+      - '--platform=managed'
+      - '--image=$_IMAGE_BASE:sandbox'
+      - '--labels=commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID'
+      - '--set-env-vars=NEXT_PUBLIC_ENVIRONMENT=sandbox'
+      - '--allow-unauthenticated'
+      - '--region=us-east1'
+      - '--memory=128Mi'
+      - '--min-instances=0'
+      - '--max-instances=1'
+      - '--concurrency=5'
+      - '--quiet'
+    id: Deploy
+    entrypoint: gcloud
+
+images:
+  - '$_IMAGE_BASE:$COMMIT_SHA'
+  - '$_IMAGE_BASE:sandbox'
+
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _IMAGE_BASE: us-east1-docker.pkg.dev/felipeoliveira-xyz-483617/cloud-run-source-deploy/sandbox.felipeoliveira.xyz
+
+tags:
+  - github
