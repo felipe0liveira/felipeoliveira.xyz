@@ -17,7 +17,7 @@ declare global {
   }
 }
 
-export const GA_TRACKING_ID = '...';
+export const GA_TRACKING_ID = 'G-JPZH84LFP7';
 
 // Send custom event to Google Analytics
 export function sendGAEvent({ action, category, label, value }: GAEvent) {

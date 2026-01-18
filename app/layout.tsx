@@ -3,71 +3,88 @@ import './globals.css'
 import PageViewTracker from '@/components/PageViewTracker'
 
 export const viewport: Viewport = {
-  themeColor: '#f57f24',
+  themeColor: '#c3ff00',
 }
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://felipeoliveira.xyz'),
-  title: 'PASeguros - Protegendo o que importa para você',
+  title: 'Felipe Oliveira - AI Engineer & Fullstack Developer',
   description:
-    'PASeguros é uma empresa Joseense, que atua no mercado desde 2010. Trabalhamos com todos os ramos de seguros, seja para você ou para sua empresa. Hoje temos uma carteira sólida e estabelecida, devido a excelência no atendimento, feito de forma personalizada, oferecendo soluções para todas as necessidades dos nossos clientes.',
+    'Software engineer specialized in AI Engineering, building intelligent systems and scalable autonomous agents. Expertise in fullstack development with React, Next.js, Node.js, Python, and cloud technologies. Former engineer at Gympass, Nubank, and PagSeguro PagBank.',
   keywords: [
-    'seguros',
-    'seguro auto',
-    'seguro residencial',
-    'seguro empresarial',
-    'seguro de vida',
-    'PASeguros',
-    'Patricia Araujo Seguros',
-    'corretora de seguros',
-    'seguros São José dos Campos',
-    'proteção familiar',
-    'seguro personalizado',
+    'AI Engineer',
+    'Fullstack Developer',
+    'Software Engineer',
+    'Artificial Intelligence',
+    'Machine Learning',
+    'Autonomous Agents',
+    'React Developer',
+    'Next.js',
+    'Node.js',
+    'Python',
+    'TypeScript',
+    'Cloud Engineering',
+    'CI/CD',
+    'Felipe Oliveira',
+    'Google AI SDK',
+    'Model Context Protocol',
+    'MCP Server',
+    'Frontend Development',
+    'Backend Development',
+    'São José dos Campos',
+    'Brazil',
   ],
-  authors: [{ name: 'PASeguros' }],
-  creator: 'PASeguros',
-  publisher: 'PASeguros',
+  authors: [{ name: 'Felipe Oliveira' }],
+  creator: 'Felipe Oliveira',
+  publisher: 'Felipe Oliveira',
   openGraph: {
     type: 'website',
-    locale: 'pt_BR',
+    locale: 'en_US',
     url: 'https://felipeoliveira.xyz',
-    siteName: 'PASeguros - Patricia Araujo Seguros',
-    title: 'PASeguros - Protegendo o que importa para você',
+    siteName: 'Felipe Oliveira - AI Engineer & Fullstack Developer',
+    title: 'Felipe Oliveira - Building the Future with Intelligent Systems',
     description:
-      'Desde 2010 oferecendo soluções personalizadas em seguros. Proteja você, sua família e seu patrimônio com atendimento de excelência.',
+      'AI Engineer and Fullstack Developer specializing in autonomous agents, LLM integration, and production-ready applications. Experience at Gympass, Nubank, and PagSeguro PagBank.',
     images: [
       {
-        url: '/images/insurance/insurance-life-2.jpg',
+        url: '/images/me.png',
         width: 1200,
         height: 630,
-        alt: 'PASeguros - Seguro de Vida',
+        alt: 'Felipe Oliveira - AI Engineer and Fullstack Developer',
       },
       {
-        url: '/images/insurance/insurance-auto-3.jpg',
+        url: '/images/github.png',
         width: 1200,
         height: 630,
-        alt: 'PASeguros - Seguro Auto',
+        alt: 'Felipe Oliveira - AI Engineer and Fullstack Developer',
       },
       {
-        url: '/images/insurance/insurance-home-3.jpg',
+        url: '/images/project-paseguros.png',
         width: 1200,
         height: 630,
-        alt: 'PASeguros - Seguro Residencial',
+        alt: 'PASeguros - Insurance Platform Project',
       },
       {
-        url: '/images/insurance/insurance-business.jpg',
+        url: '/images/project-englishprof.png',
         width: 1200,
         height: 630,
-        alt: 'PASeguros - Seguro Empresarial',
+        alt: 'English Professor - Educational Platform',
+      },
+      {
+        url: '/images/project-kls.png',
+        width: 1200,
+        height: 630,
+        alt: 'KLS Eventos - Event Management Platform',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PASeguros - Protegendo o que importa para você',
+    title: 'Felipe Oliveira - AI Engineer & Fullstack Developer',
     description:
-      'Desde 2010 oferecendo soluções personalizadas em seguros. Proteja você, sua família e seu patrimônio.',
-    images: ['/images/insurance/insurance-life-2.jpg'],
+      'Building intelligent systems and scalable autonomous agents. Expertise in AI Engineering, React, Next.js, Node.js, and cloud technologies.',
+    images: ['/images/me.png'],
+    creator: '@felipe0liveira',
   },
   robots: {
     index: true,
@@ -80,6 +97,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  alternates: {
+    canonical: 'https://felipeoliveira.xyz',
+  },
+  category: 'technology',
 }
 
 export default function RootLayout({
@@ -88,8 +109,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='pt-BR'>
-      <body className='bg-gray-50 text-gray-800 antialiased'>
+    <html lang='en'>
+      <body className='bg-black text-white antialiased'>
         {children}
         <PageViewTracker />
       </body>
