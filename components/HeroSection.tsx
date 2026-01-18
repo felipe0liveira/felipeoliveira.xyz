@@ -98,7 +98,7 @@ export default function HeroSection() {
                   alt="Felipe Oliveira - AI Engineer and Fullstack Developer"
                   width={500}
                   height={600}
-                  className="w-full h-auto object-cover"
+                  className="w-full h-auto object-cover grayscale"
                   priority
                 />
               </div>

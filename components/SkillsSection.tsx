@@ -103,7 +103,7 @@ export default function SkillsSection() {
           {/* Navigation Buttons */}
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-16 md:h-16 border-2 border-lemon-500 bg-black/80 backdrop-blur-sm hover:bg-lemon-500 hover:text-black transition-all duration-300 flex items-center justify-center group -translate-x-4 md:-translate-x-8"
+            className="cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-16 md:h-16 border-2 border-lemon-500 bg-black/80 backdrop-blur-sm hover:bg-lemon-500 hover:text-black transition-all duration-300 flex items-center justify-center group -translate-x-4 md:-translate-x-8"
             aria-label="Previous skill"
           >
             <span className="text-2xl font-bold group-hover:scale-110 transition-transform">&lt;</span>
@@ -111,7 +111,7 @@ export default function SkillsSection() {
 
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-16 md:h-16 border-2 border-pink-500 bg-black/80 backdrop-blur-sm hover:bg-pink-500 hover:text-black transition-all duration-300 flex items-center justify-center group translate-x-4 md:translate-x-8"
+            className="cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-16 md:h-16 border-2 border-pink-500 bg-black/80 backdrop-blur-sm hover:bg-pink-500 hover:text-black transition-all duration-300 flex items-center justify-center group translate-x-4 md:translate-x-8"
             aria-label="Next skill"
           >
             <span className="text-2xl font-bold group-hover:scale-110 transition-transform">&gt;</span>
