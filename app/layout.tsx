@@ -51,31 +51,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: 'Felipe Oliveira - AI Engineer and Fullstack Developer',
-      },
-      {
-        url: '/images/github.png',
-        width: 1200,
-        height: 630,
-        alt: 'Felipe Oliveira - AI Engineer and Fullstack Developer',
-      },
-      {
-        url: '/images/project-paseguros.png',
-        width: 1200,
-        height: 630,
-        alt: 'PASeguros - Insurance Platform Project',
-      },
-      {
-        url: '/images/project-englishprof.png',
-        width: 1200,
-        height: 630,
-        alt: 'English Professor - Educational Platform',
-      },
-      {
-        url: '/images/project-kls.png',
-        width: 1200,
-        height: 630,
-        alt: 'KLS Eventos - Event Management Platform',
-      },
+      }
     ],
   },
   twitter: {
