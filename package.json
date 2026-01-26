@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@next/third-parties": "^16.1.1",
+    "dotenv": "^17.2.3",
     "lottie-react": "^2.4.1",
     "next": "16.1.1",
+    "nodemailer": "^7.0.12",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
