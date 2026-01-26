@@ -13,7 +13,7 @@ export default function HeroSection() {
 
   const handleDownloadCV = () => {
     // Download CV
-    window.open('/cv.pdf', '_blank');
+    window.open('https://www.linkedin.com/in/felipe0liveira', '_blank');
   };
 
   return (
