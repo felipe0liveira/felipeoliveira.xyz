@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { formatPhoneNumber } from '@/utils/phoneFormatter';
 
 interface ContactFormData {
   name: string;
@@ -18,25 +19,24 @@ function validateFormData(data: ContactFormData): ValidationError[] {
 
   // Validate name
   if (!data.name || data.name.trim().length < 3) {
-    errors.push({ field: 'name', message: 'Nome deve ter pelo menos 3 caracteres' });
+    errors.push({ field: 'name', message: 'Name must be at least 3 characters' });
   }
 
   // Validate phone
-  const phoneRegex = /^[\d\s()+-]+$/;
   const cleanPhone = data.phone.replace(/\D/g, '');
-  if (!data.phone || !phoneRegex.test(data.phone) || cleanPhone.length < 10) {
-    errors.push({ field: 'phone', message: 'Telefone inválido' });
+  if (!data.phone || !data.phone.startsWith('+') || cleanPhone.length < 10) {
+    errors.push({ field: 'phone', message: 'Invalid phone number' });
   }
 
   // Validate email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!data.email || !emailRegex.test(data.email)) {
-    errors.push({ field: 'email', message: 'Email inválido' });
+    errors.push({ field: 'email', message: 'Invalid email' });
   }
 
   // Validate message
   if (!data.message || data.message.trim().length < 10) {
-    errors.push({ field: 'message', message: 'Mensagem deve ter pelo menos 10 caracteres' });
+    errors.push({ field: 'message', message: 'Message must be at least 10 characters' });
   }
 
   return errors;
@@ -76,11 +76,15 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Create no-reply email address
+    const noreplyEmail = gmailUser.replace('@', '+noreply@');
+
     // Email options for thank you message
     const mailOptions = {
-      from: gmailUser,
+      from: `"Felipe Oliveira (No Reply)" <${noreplyEmail}>`,
       to: data.email,
-      subject: 'Obrigado pelo seu contato!',
+      bcc: gmailUser,
+      subject: 'Thank you for contacting me!',
       html: `
         <!DOCTYPE html>
         <html>
@@ -121,57 +125,57 @@ export async function POST(request: NextRequest) {
         <body>
           <div class="container">
             <div class="header">
-              <h1>Obrigado pelo Contato!</h1>
+              <h1>Thank You for Contacting Me!</h1>
             </div>
             <div class="content">
-              <p>Olá, <strong>${data.name}</strong>!</p>
+              <p>Hello, <strong>${data.name}</strong>!</p>
               
-              <p>Recebi sua mensagem e agradeço muito por entrar em contato.</p>
+              <p>I received your message and I really appreciate you reaching out.</p>
               
-              <p>Responderei o mais breve possível no email informado.</p>
+              <p>I'll respond as soon as possible to the email you provided.</p>
               
-              <p><strong>Resumo da sua mensagem:</strong></p>
+              <p><strong>Summary of your message:</strong></p>
               <p style="background-color: #f5f5f5; padding: 15px; border-left: 4px solid #8B7355; margin: 15px 0;">
                 ${data.message}
               </p>
               
-              <p><strong>Seus dados de contato:</strong></p>
+              <p><strong>Your contact information:</strong></p>
               <ul>
                 <li>Email: ${data.email}</li>
-                <li>Telefone: ${data.phone}</li>
+                <li>Phone: ${formatPhoneNumber(data.phone)}</li>
               </ul>
               
-              <p>Até breve!</p>
-              <p>Atenciosamente,<br>Felipe Oliveira</p>
+              <p>Talk soon!</p>
+              <p>Best regards,<br>Felipe Oliveira</p>
             </div>
             <div class="footer">
-              <p>Esta é uma mensagem automática. Por favor, não responda este email.</p>
+              <p>This is an automated message. Please do not reply to this email.</p>
             </div>
           </div>
         </body>
         </html>
       `,
       text: `
-        Olá, ${data.name}!
+        Hello, ${data.name}!
         
-        Recebi sua mensagem e agradeço muito por entrar em contato.
+        I received your message and I really appreciate you reaching out.
         
-        Responderei o mais breve possível no email informado.
+        I'll respond as soon as possible to the email you provided.
         
-        Resumo da sua mensagem:
+        Summary of your message:
         ${data.message}
         
-        Seus dados de contato:
+        Your contact information:
         - Email: ${data.email}
-        - Telefone: ${data.phone}
+        - Phone: ${formatPhoneNumber(data.phone)}
         
-        Até breve!
+        Talk soon!
         
-        Atenciosamente,
+        Best regards,
         Felipe Oliveira
         
         ---
-        Esta é uma mensagem automática. Por favor, não responda este email.
+        This is an automated message. Please do not reply to this email.
       `,
     };
 

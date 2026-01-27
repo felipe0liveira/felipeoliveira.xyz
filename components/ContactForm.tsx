@@ -2,6 +2,9 @@
 
 import { useState, FormEvent } from 'react';
 import Lottie from 'lottie-react';
+import { Loader2 } from 'lucide-react';
+import { useContact } from '@/hooks/useContact';
+import { formatPhoneNumber } from '@/utils/phoneFormatter';
 import contactAnimation from '@/utils/lottie/contact-animation.json';
 
 interface FormData {
@@ -19,6 +22,8 @@ interface FormErrors {
 }
 
 export default function ContactForm() {
+  const { sendContact, loading, error, success, resetStatus } = useContact();
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     phone: '',
@@ -27,8 +32,6 @@ export default function ContactForm() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -41,10 +44,10 @@ export default function ContactForm() {
     }
 
     // Validate phone (WhatsApp)
-    const phoneRegex = /^[\d\s()+-]+$/;
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone is required';
-    } else if (!phoneRegex.test(formData.phone) || formData.phone.replace(/\D/g, '').length < 10) {
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (!formData.phone.trim() || !formData.phone.startsWith('+')) {
+      newErrors.phone = 'Phone must start with country code (+)';
+    } else if (phoneDigits.length < 10) {
       newErrors.phone = 'Invalid phone number';
     }
 
@@ -69,28 +72,22 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitStatus('idle');
+    
+    // Prevent multiple submissions
+    if (loading) {
+      return;
+    }
+
+    resetStatus();
 
     if (!validateForm()) {
       return;
     }
 
-    setIsSubmitting(true);
-
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      setSubmitStatus('success');
+      await sendContact(formData);
+      
+      // Clear form on success
       setFormData({
         name: '',
         phone: '',
@@ -99,15 +96,13 @@ export default function ContactForm() {
       });
       setErrors({});
     } catch (err) {
-      setSubmitStatus('error');
       console.error('Error submitting form:', err);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   const handleChange = (field: keyof FormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    const newValue = field === 'phone' ? formatPhoneNumber(value) : value;
+    setFormData((prev) => ({ ...prev, [field]: newValue }));
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -165,100 +160,107 @@ export default function ContactForm() {
           {/* Right Column - Form */}
           <div className="order-1 lg:order-2">
             <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Field */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-mono text-lemon-500 mb-2 uppercase">
-              Name *
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={formData.name}
-              onChange={(e) => handleChange('name', e.target.value)}
-              className={`w-full px-4 py-3 bg-black border ${
-                errors.name ? 'border-pink-500' : 'border-gray-700'
-              } text-white focus:outline-none focus:border-lemon-500 transition-all font-mono`}
-              placeholder="Your full name"
-            />
-            {errors.name && <p className="text-pink-500 text-sm mt-1 font-mono">{errors.name}</p>}
-          </div>
+              {/* Name Field */}
+              <div>
+                <label htmlFor="name" className="block text-sm font-mono text-lemon-500 mb-2 uppercase">
+                  Name *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => handleChange('name', e.target.value)}
+                  className={`w-full px-4 py-3 bg-black border ${
+                    errors.name ? 'border-pink-500' : 'border-gray-700'
+                  } text-white focus:outline-none focus:border-lemon-500 transition-all font-mono`}
+                  placeholder="Your full name"
+                />
+                {errors.name && <p className="text-pink-500 text-sm mt-1 font-mono">{errors.name}</p>}
+              </div>
 
-          {/* Phone Field */}
-          <div>
-            <label htmlFor="phone" className="block text-sm font-mono text-lemon-500 mb-2 uppercase">
-              Phone (WhatsApp) *
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              value={formData.phone}
-              onChange={(e) => handleChange('phone', e.target.value)}
-              className={`w-full px-4 py-3 bg-black border ${
-                errors.phone ? 'border-pink-500' : 'border-gray-700'
-              } text-white focus:outline-none focus:border-lemon-500 transition-all font-mono`}
-              placeholder="+55 (00) 00000-0000"
-            />
-            {errors.phone && <p className="text-pink-500 text-sm mt-1 font-mono">{errors.phone}</p>}
-          </div>
+              {/* Phone Field */}
+              <div>
+                <label htmlFor="phone" className="block text-sm font-mono text-lemon-500 mb-2 uppercase">
+                  Phone (WhatsApp) *
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={formData.phone}
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  className={`w-full px-4 py-3 bg-black border ${
+                    errors.phone ? 'border-pink-500' : 'border-gray-700'
+                  } text-white focus:outline-none focus:border-lemon-500 transition-all font-mono`}
+                  placeholder="+00 (00) 00000-0000"
+                />
+                {errors.phone && <p className="text-pink-500 text-sm mt-1 font-mono">{errors.phone}</p>}
+              </div>
 
-          {/* Email Field */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-mono text-lemon-500 mb-2 uppercase">
-              Email *
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              className={`w-full px-4 py-3 bg-black border ${
-                errors.email ? 'border-pink-500' : 'border-gray-700'
-              } text-white focus:outline-none focus:border-lemon-500 transition-all font-mono`}
-              placeholder="your.email@example.com"
-            />
-            {errors.email && <p className="text-pink-500 text-sm mt-1 font-mono">{errors.email}</p>}
-          </div>
+              {/* Email Field */}
+              <div>
+                <label htmlFor="email" className="block text-sm font-mono text-lemon-500 mb-2 uppercase">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={formData.email}
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  className={`w-full px-4 py-3 bg-black border ${
+                    errors.email ? 'border-pink-500' : 'border-gray-700'
+                  } text-white focus:outline-none focus:border-lemon-500 transition-all font-mono`}
+                  placeholder="your.email@example.com"
+                />
+                {errors.email && <p className="text-pink-500 text-sm mt-1 font-mono">{errors.email}</p>}
+              </div>
 
-          {/* Message Field */}
-          <div>
-            <label htmlFor="message" className="block text-sm font-mono text-lemon-500 mb-2 uppercase">
-              Message *
-            </label>
-            <textarea
-              id="message"
-              rows={6}
-              value={formData.message}
-              onChange={(e) => handleChange('message', e.target.value)}
-              className={`w-full px-4 py-3 bg-black border ${
-                errors.message ? 'border-pink-500' : 'border-gray-700'
-              } text-white focus:outline-none focus:border-lemon-500 transition-all resize-none font-mono`}
-              placeholder="Write your message here..."
-            />
-            {errors.message && <p className="text-pink-500 text-sm mt-1 font-mono">{errors.message}</p>}
-          </div>
+              {/* Message Field */}
+              <div>
+                <label htmlFor="message" className="block text-sm font-mono text-lemon-500 mb-2 uppercase">
+                  Message *
+                </label>
+                <textarea
+                  id="message"
+                  rows={6}
+                  value={formData.message}
+                  onChange={(e) => handleChange('message', e.target.value)}
+                  className={`w-full px-4 py-3 bg-black border ${
+                    errors.message ? 'border-pink-500' : 'border-gray-700'
+                  } text-white focus:outline-none focus:border-lemon-500 transition-all resize-none font-mono`}
+                  placeholder="Write your message here..."
+                />
+                {errors.message && <p className="text-pink-500 text-sm mt-1 font-mono">{errors.message}</p>}
+              </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full px-8 py-4 bg-lemon-500 text-black font-bold hover:bg-lemon-400 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none uppercase"
-          >
-            {isSubmitting ? 'SENDING...' : 'SEND MESSAGE >>'}
-          </button>
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full px-8 py-4 bg-lemon-500 text-black font-bold hover:bg-lemon-400 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none uppercase flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    SENDING...
+                  </>
+                ) : (
+                  'SEND MESSAGE >>'
+                )}
+              </button>
 
-          {/* Status Messages */}
-          {submitStatus === 'success' && (
-            <div className="border-2 border-lemon-500 bg-lemon-500/10 text-lemon-500 px-4 py-3 font-mono text-sm">
-              <span className="text-lemon-500">&gt;&gt;</span> MESSAGE SENT SUCCESSFULLY! Thank you for reaching out.
-            </div>
-          )}
+              {/* Status Messages */}
+              {success && (
+                <div className="border-2 border-lemon-500 bg-lemon-500/10 text-lemon-500 px-4 py-3 font-mono text-sm">
+                  <span className="text-lemon-500">&gt;&gt;</span> MESSAGE SENT SUCCESSFULLY! Thank you for reaching out.
+                </div>
+              )}
 
-          {submitStatus === 'error' && (
-            <div className="border-2 border-pink-500 bg-pink-500/10 text-pink-500 px-4 py-3 font-mono text-sm">
-              <span className="text-pink-500">&gt;&gt;</span> ERROR: Failed to send message. Please try again.
-            </div>
-          )}
-        </form>
+              {error && (
+                <div className="border-2 border-pink-500 bg-pink-500/10 text-pink-500 px-4 py-3 font-mono text-sm">
+                  <span className="text-pink-500">&gt;&gt;</span> ERROR: Failed to send message. Please try again.
+                </div>
+              )}
+            </form>
           </div>
         </div>
       </div>
