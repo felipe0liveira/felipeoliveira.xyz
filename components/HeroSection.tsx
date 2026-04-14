@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import GlitchImage from '@/components/GlitchImage';
 
 export default function HeroSection() {
   const handleViewProjects = () => {
@@ -93,7 +93,7 @@ export default function HeroSection() {
               
               {/* Image Container */}
               <div className="relative border-2 border-lemon-500/50 p-1 bg-black/50 backdrop-blur-sm">
-                <Image
+                <GlitchImage
                   src="/images/me.png"
                   alt="Felipe Oliveira - AI Engineer and Fullstack Developer"
                   width={500}
