@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import GlitchButton from '@/components/GlitchButton';
 
 interface Project {
   id: number;
@@ -216,7 +217,8 @@ export default function ProjectsSection() {
                   </p>
 
                   {/* Visit Button */}
-                  <a
+                  <GlitchButton
+                    as="a"
                     href={activeProject.url}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -229,7 +231,7 @@ export default function ProjectsSection() {
                     `}
                   >
                     VISIT PROJECT &gt;&gt;
-                  </a>
+                  </GlitchButton>
 
                   {/* Decorative Corner */}
                   <div

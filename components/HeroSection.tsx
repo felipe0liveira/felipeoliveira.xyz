@@ -1,6 +1,7 @@
 'use client';
 
 import GlitchImage from '@/components/GlitchImage';
+import GlitchButton from '@/components/GlitchButton';
 
 export default function HeroSection() {
   const handleViewProjects = () => {
@@ -70,18 +71,18 @@ export default function HeroSection() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4">
-              <button
+              <GlitchButton
                 onClick={handleViewProjects}
                 className="px-8 py-4 bg-lemon-500 text-black font-bold hover:bg-lemon-400 transition-all duration-300 transform hover:scale-105"
               >
                 VIEW PROJECTS &gt;&gt;
-              </button>
-              <button
+              </GlitchButton>
+              <GlitchButton
                 onClick={handleDownloadCV}
                 className="px-8 py-4 border-2 border-white text-white font-bold hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-105"
               >
                 DOWNLOAD CV
-              </button>
+              </GlitchButton>
             </div>
           </div>
 

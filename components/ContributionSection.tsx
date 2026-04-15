@@ -2,6 +2,7 @@
 
 import { useGitHub } from '@/hooks/useGitHub';
 import Image from 'next/image';
+import GlitchButton from '@/components/GlitchButton';
 
 export default function ContributionSection() {
   const { profile, loading, error } = useGitHub();
@@ -173,14 +174,15 @@ export default function ContributionSection() {
 
               {/* Visit GitHub Button */}
               <div className="border-t border-gray-800 pt-6">
-                <a
+                <GlitchButton
+                  as="a"
                   href={profile.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block px-8 py-4 border-2 border-lemon-500 text-lemon-500 hover:bg-lemon-500 hover:text-black font-bold transition-all duration-300 transform hover:scale-105"
                 >
                   VIEW GITHUB PROFILE &gt;&gt;
-                </a>
+                </GlitchButton>
               </div>
 
               {/* Command Prompt End */}

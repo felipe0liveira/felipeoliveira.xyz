@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'motion/react';
+import GlitchButton from '@/components/GlitchButton';
 
 interface Skill {
   id: number;
@@ -106,21 +108,21 @@ export default function SkillsSection() {
         {/* Carousel Container */}
         <div className="relative">
           {/* Navigation Buttons */}
-          <button
+          <GlitchButton
             onClick={handlePrev}
             className="cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-16 md:h-16 border-2 border-lemon-500 bg-black/80 backdrop-blur-sm hover:bg-lemon-500 hover:text-black transition-all duration-300 flex items-center justify-center group -translate-x-4 md:-translate-x-8"
             aria-label="Previous skill"
           >
             <span className="text-2xl font-bold group-hover:scale-110 transition-transform">&lt;</span>
-          </button>
+          </GlitchButton>
 
-          <button
+          <GlitchButton
             onClick={handleNext}
             className="cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-16 md:h-16 border-2 border-pink-500 bg-black/80 backdrop-blur-sm hover:bg-pink-500 hover:text-black transition-all duration-300 flex items-center justify-center group translate-x-4 md:translate-x-8"
             aria-label="Next skill"
           >
             <span className="text-2xl font-bold group-hover:scale-110 transition-transform">&gt;</span>
-          </button>
+          </GlitchButton>
 
           {/* Cards Container */}
           <div className="overflow-hidden px-2 md:px-4">
@@ -193,7 +195,7 @@ export default function SkillsSection() {
           {/* Carousel Indicators */}
           <div className="flex justify-center gap-2 mt-8">
             {skills.map((_, idx) => (
-              <button
+              <motion.button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 className={`
@@ -203,8 +205,10 @@ export default function SkillsSection() {
                     : 'w-6 bg-gray-600 hover:bg-gray-500'
                   }
                 `}
+                whileHover={{ scaleY: 2.5, scaleX: 1.1 }}
+                whileTap={{ scaleY: 3, scaleX: 0.9 }}
                 aria-label={`Go to skill ${idx + 1}`}
-              ></button>
+              ></motion.button>
             ))}
           </div>
         </div>
