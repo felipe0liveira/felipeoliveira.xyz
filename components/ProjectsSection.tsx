@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import GlitchButton from '@/components/GlitchButton';
 import { useProjects } from '@/hooks/useProjects';
@@ -12,6 +12,14 @@ export default function ProjectsSection() {
   const activeProject = selectedProject !== null
     ? projects.find(p => p.id === selectedProject)
     : null;
+
+  useEffect(() => {
+    if (projects.length === 0) return;
+    projects.forEach(p => {
+      const img = new window.Image();
+      img.src = p.image;
+    });
+  }, [projects]);
 
   if (loading) {
     return (
