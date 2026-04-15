@@ -1,10 +1,10 @@
-import { isProductionClient } from './environment';
+import { isProductionClient } from './environment'
 
 interface GAEvent {
-  action: string;
-  category: string;
-  label?: string;
-  value?: number;
+  action: string
+  category: string
+  label?: string
+  value?: number
 }
 
 declare global {
@@ -12,19 +12,19 @@ declare global {
     gtag?: (
       command: string,
       targetId: string,
-      config?: Record<string, unknown>
-    ) => void;
+      config?: Record<string, unknown>,
+    ) => void
   }
 }
 
-export const GA_TRACKING_ID = 'G-JPZH84LFP7';
+export const GA_TRACKING_ID = 'G-JPZH84LFP7'
 
 // Send custom event to Google Analytics
 export function sendGAEvent({ action, category, label, value }: GAEvent) {
   // Only send events in production environment
   if (!isProductionClient()) {
-    console.log('[Analytics - Dev]', { action, category, label, value });
-    return;
+    console.log('[Analytics - Dev]', { action, category, label, value })
+    return
   }
 
   if (typeof window !== 'undefined' && window.gtag) {
@@ -32,7 +32,7 @@ export function sendGAEvent({ action, category, label, value }: GAEvent) {
       event_category: category,
       event_label: label,
       value: value,
-    });
+    })
   }
 }
 
@@ -40,14 +40,14 @@ export function sendGAEvent({ action, category, label, value }: GAEvent) {
 export function trackPageView(url: string) {
   // Only track page views in production environment
   if (!isProductionClient()) {
-    console.log('[Analytics - Dev] Page view:', url);
-    return;
+    console.log('[Analytics - Dev] Page view:', url)
+    return
   }
 
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('config', GA_TRACKING_ID, {
       page_path: url,
-    });
+    })
   }
 }
 
@@ -60,7 +60,7 @@ export const GAEvents = {
       category: 'Product',
       label: productName,
     }),
-  
+
   productClick: (productName: string) =>
     sendGAEvent({
       action: 'click_product',
@@ -145,4 +145,4 @@ export const GAEvents = {
       category: 'User Intent',
       label: intent,
     }),
-};
+}

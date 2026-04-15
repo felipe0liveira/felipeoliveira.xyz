@@ -1,4 +1,4 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   // Enable standalone output for Docker
@@ -48,8 +48,8 @@ const nextConfig: NextConfig = {
         destination: 'https://felipeoliveira.xyz/:path*',
         permanent: true,
       },
-    ];
+    ]
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

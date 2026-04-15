@@ -29,29 +29,29 @@ export function useProducts(): UseProductsReturn {
 
 // ✅ Good - Interface for function return types
 interface UseProductsReturn {
-  products: Product[];
-  loading: boolean;
-  error: Error | null;
+  products: Product[]
+  loading: boolean
+  error: Error | null
 }
 
 // ✅ Good - Proper typing for props
 interface ProductCardProps {
-  product: Product;
-  onSelect?: (id: number) => void;
+  product: Product
+  onSelect?: (id: number) => void
 }
 
 // ❌ Bad - Using 'any'
-function processData(data: any) { }
+function processData(data: any) {}
 
 // ✅ Good - Specific types
-function processData(data: Product[]) { }
+function processData(data: Product[]) {}
 
 // ✅ Good - Null safety
-const price = product.oldPrice ?? product.price;
+const price = product.oldPrice ?? product.price
 
 // ✅ Good - Type guards
 if (error instanceof Error) {
-  console.error(error.message);
+  console.error(error.message)
 }
 ```
 
@@ -73,6 +73,7 @@ export default function Hero() {
 ```
 
 **When to use:**
+
 - Static content without interactivity
 - SEO-critical content
 - No need for React hooks or browser APIs
@@ -83,20 +84,21 @@ Add `'use client'` directive only when necessary:
 
 ```typescript
 // components/Products.tsx
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { useProducts } from '@/hooks/useProducts';
+import { useState } from 'react'
+import { useProducts } from '@/hooks/useProducts'
 
 export default function Products() {
-  const { products, loading, error } = useProducts();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  
+  const { products, loading, error } = useProducts()
+  const [currentIndex, setCurrentIndex] = useState(0)
+
   // Component logic
 }
 ```
 
 **When to use:**
+
 - Need React hooks (useState, useEffect, etc.)
 - Browser APIs (localStorage, window, etc.)
 - Event handlers (onClick, onChange, etc.)
@@ -108,19 +110,19 @@ export default function Products() {
 
 ```typescript
 // app/api/[resource]/route.ts
-import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server'
 
 export interface ResourceType {
-  id: number;
+  id: number
   // ... other fields
 }
 
 const resources: ResourceType[] = [
   // Static data or database calls
-];
+]
 
 export async function GET() {
-  return NextResponse.json(resources);
+  return NextResponse.json(resources)
 }
 ```
 
@@ -136,13 +138,10 @@ export async function GET() {
 // ✅ Good - Error handling
 export async function GET() {
   try {
-    const data = await fetchData();
-    return NextResponse.json(data);
+    const data = await fetchData()
+    return NextResponse.json(data)
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch data' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 })
   }
 }
 ```
@@ -153,46 +152,46 @@ export async function GET() {
 
 ```typescript
 // hooks/useResource.ts
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { Resource } from '@/types/resource';
+import { useState, useEffect } from 'react'
+import { Resource } from '@/types/resource'
 
 interface UseResourceReturn {
-  resources: Resource[];
-  loading: boolean;
-  error: Error | null;
+  resources: Resource[]
+  loading: boolean
+  error: Error | null
 }
 
 export function useResource(): UseResourceReturn {
-  const [resources, setResources] = useState<Resource[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [resources, setResources] = useState<Resource[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     async function fetchResources() {
       try {
         const response = await fetch('/api/resource', {
           cache: 'force-cache',
-        });
+        })
 
         if (!response.ok) {
-          throw new Error('Failed to fetch resources');
+          throw new Error('Failed to fetch resources')
         }
 
-        const data = await response.json();
-        setResources(data);
+        const data = await response.json()
+        setResources(data)
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Unknown error'));
+        setError(err instanceof Error ? err : new Error('Unknown error'))
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
 
-    fetchResources();
-  }, []);
+    fetchResources()
+  }, [])
 
-  return { resources, loading, error };
+  return { resources, loading, error }
 }
 ```
 
@@ -212,14 +211,14 @@ export function useResource(): UseResourceReturn {
 
 ```typescript
 // ✅ Good - Typed state
-const [selectedValue, setSelectedValue] = useState<Value | null>(null);
+const [selectedValue, setSelectedValue] = useState<Value | null>(null)
 
 // ✅ Good - Initial state from function (for SSR safety)
-const [visibleItems, setVisibleItems] = useState(1);
+const [visibleItems, setVisibleItems] = useState(1)
 
 useEffect(() => {
-  setVisibleItems(getVisibleItems());
-}, []);
+  setVisibleItems(getVisibleItems())
+}, [])
 ```
 
 ### useEffect
@@ -228,25 +227,25 @@ useEffect(() => {
 // ✅ Good - Cleanup function
 useEffect(() => {
   const handleResize = () => {
-    setVisibleItems(getVisibleItems());
-  };
+    setVisibleItems(getVisibleItems())
+  }
 
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
+  window.addEventListener('resize', handleResize)
+  return () => window.removeEventListener('resize', handleResize)
+}, [])
 
 // ✅ Good - Dependencies array
 useEffect(() => {
   if (selectedValue) {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'
   } else {
-    document.body.style.overflow = '';
+    document.body.style.overflow = ''
   }
-  
+
   return () => {
-    document.body.style.overflow = '';
-  };
-}, [selectedValue]);
+    document.body.style.overflow = ''
+  }
+}, [selectedValue])
 ```
 
 ## Progressive Loading
@@ -291,41 +290,41 @@ Use the beige color palette defined in `globals.css`:
 
 ```typescript
 // Available colors
-className="bg-beige-50"      // Lightest
-className="bg-beige-100"
-className="bg-beige-200"
-className="bg-beige-300"
-className="bg-beige-400"
-className="bg-beige-500"
-className="bg-beige-600"     // Primary
-className="bg-beige-700"
-className="bg-beige-800"
-className="bg-beige-900"     // Darkest
+className = 'bg-beige-50' // Lightest
+className = 'bg-beige-100'
+className = 'bg-beige-200'
+className = 'bg-beige-300'
+className = 'bg-beige-400'
+className = 'bg-beige-500'
+className = 'bg-beige-600' // Primary
+className = 'bg-beige-700'
+className = 'bg-beige-800'
+className = 'bg-beige-900' // Darkest
 ```
 
 ### Responsive Design
 
 ```typescript
 // ✅ Mobile-first approach
-className="grid grid-cols-2 lg:grid-cols-4"  // 2 cols mobile, 4 desktop
-className="text-base md:text-lg lg:text-xl"   // Responsive text
-className="hidden md:flex"                    // Hide on mobile
+className = 'grid grid-cols-2 lg:grid-cols-4' // 2 cols mobile, 4 desktop
+className = 'text-base md:text-lg lg:text-xl' // Responsive text
+className = 'hidden md:flex' // Hide on mobile
 ```
 
 ### Animations
 
 ```typescript
 // ✅ Loading skeleton
-className="animate-pulse"
+className = 'animate-pulse'
 
 // ✅ Smooth transitions
-className="transition-all duration-300"
+className = 'transition-all duration-300'
 
 // ✅ Hover effects
-className="hover:bg-beige-700 transition-colors"
+className = 'hover:bg-beige-700 transition-colors'
 
 // ✅ Transform on hover
-className="transform hover:scale-105 transition-transform"
+className = 'transform hover:scale-105 transition-transform'
 ```
 
 ## Image Optimization
@@ -440,6 +439,7 @@ public/
 ## Testing Checklist
 
 Before committing:
+
 - [ ] TypeScript compiles without errors
 - [ ] Build succeeds (`npm run build`)
 - [ ] All components render without errors
@@ -492,16 +492,16 @@ const selectedItems = useMemo(() => {
 ```typescript
 // ✅ Use useMemo for expensive calculations
 const sortedProducts = useMemo(() => {
-  return products.sort((a, b) => a.price - b.price);
-}, [products]);
+  return products.sort((a, b) => a.price - b.price)
+}, [products])
 
 // ✅ Use useCallback for event handlers passed as props
 const handleSelect = useCallback((id: number) => {
-  setSelected(id);
-}, []);
+  setSelected(id)
+}, [])
 
 // ✅ Use force-cache for static API data
-fetch('/api/products', { cache: 'force-cache' });
+fetch('/api/products', { cache: 'force-cache' })
 ```
 
 ## Commit Message Convention
@@ -520,6 +520,7 @@ chore: update dependencies
 ```
 
 Examples:
+
 - `feat: add FAQ API route and load FAQs dynamically`
 - `fix: resolve React hooks and Tailwind v4 compatibility issues`
 - `docs: update README to reflect felipeoliveira-xyz project`

@@ -1,26 +1,27 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { GA_TRACKING_ID, trackPageView } from '@/utils/analytics';
-import { isProductionClient } from '@/utils/environment';
-import { Suspense } from 'react';
-import Script from 'next/script';
+import { useEffect } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { GA_TRACKING_ID, trackPageView } from '@/utils/analytics'
+import { isProductionClient } from '@/utils/environment'
+import { Suspense } from 'react'
+import Script from 'next/script'
 
 function PageViewTrackerComponent() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
-    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
-    trackPageView(url);
-  }, [pathname, searchParams]);
+    const url =
+      pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
+    trackPageView(url)
+  }, [pathname, searchParams])
 
-  return null;
+  return null
 }
 
 export default function PageViewTracker() {
-  const shouldLoadGA = isProductionClient();
+  const shouldLoadGA = isProductionClient()
 
   return (
     <>
@@ -28,9 +29,9 @@ export default function PageViewTracker() {
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-            strategy="afterInteractive"
+            strategy='afterInteractive'
           />
-          <Script id="google-analytics" strategy="afterInteractive">
+          <Script id='google-analytics' strategy='afterInteractive'>
             {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
@@ -46,5 +47,5 @@ export default function PageViewTracker() {
         <PageViewTrackerComponent />
       </Suspense>
     </>
-  );
+  )
 }
