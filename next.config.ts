@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
   // Strict mode
   reactStrictMode: true,
 
+  // Expose package version to the client at build time
+  env: {
+    NEXT_PUBLIC_APP_VERSION: process.env.npm_package_version,
+  },
+
   // Redirects from root domain to subdomain
   async redirects() {
     return [

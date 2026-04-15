@@ -30,13 +30,12 @@ export default function HeroSection() {
         {/* Header Bar */}
         <div className="flex justify-between items-center text-xs md:text-sm font-mono mb-16 border-b border-lemon-500/30 pb-4">
           <div className="flex items-center gap-4">
-            <span className="text-lemon-500">01. felipeoliveira.xyz</span>
-            <span className="text-gray-500">START</span>
+            <span className="text-lemon-500">felipeoliveira.xyz</span>
+            <span className="hidden md:inline text-gray-500">START</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-gray-500">/09. END</span>
-            <span className="text-lemon-500">STATUS: ONLINE_V2.5.1 [ACTIVE]</span>
-            <span className="text-lemon-500 text-xl">+</span>
+            <span className="text-gray-500">STATUS: ONLINE_V{process.env.NEXT_PUBLIC_APP_VERSION} [ACTIVE]</span>
+            <span className="text-lemon-500 text-xl hidden md:inline">+</span>
           </div>
         </div>
 
