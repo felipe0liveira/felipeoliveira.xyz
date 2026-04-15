@@ -3,59 +3,49 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import GlitchButton from '@/components/GlitchButton';
-
-interface Project {
-  id: number;
-  name: string;
-  description: string;
-  url: string;
-  image: string;
-  status?: string;
-  color: 'lemon' | 'pink';
-}
-
-const projects: Project[] = [
-  {
-    id: 1,
-    name: 'PASeguros',
-    description: 'A comprehensive insurance platform offering various insurance products with an intuitive user interface and seamless experience.',
-    url: 'https://paseguros.com.br',
-    image: '/images/project-paseguros.png',
-    color: 'lemon',
-  },
-  {
-    id: 2,
-    name: 'Bruna Cruz',
-    description: 'A personal website for an English teacher, featuring course offerings, scheduling, and resources for students.',
-    url: 'https://englishprof.brunabcruz.com.br',
-    image: '/images/project-englishprof.png',
-    color: 'pink',
-  },
-  {
-    id: 3,
-    name: 'KLS Eventos',
-    description: 'An event management platform designed to streamline event planning, ticketing, and attendee engagement.',
-    url: 'https://klseventos.com.br',
-    image: '/images/project-kls.png',
-    status: 'in development',
-    color: 'lemon',
-  },
-  {
-    id: 4,
-    name: 'Plie Croche',
-    description: 'A Landing page for promoting crochet products and workshops, showcasing designs and facilitating customer inquiries.',
-    url: 'http://pliecroche.com/',
-    image: '/images/project-pliecroche.png',
-    color: 'pink',
-  },
-];
+import { useProjects } from '@/hooks/useProjects';
 
 export default function ProjectsSection() {
+  const { projects, loading, error } = useProjects();
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
-  const activeProject = selectedProject !== null 
-    ? projects.find(p => p.id === selectedProject) 
+  const activeProject = selectedProject !== null
+    ? projects.find(p => p.id === selectedProject)
     : null;
+
+  if (loading) {
+    return (
+      <section className="relative min-h-screen bg-black text-white py-20 overflow-hidden" id="projects">
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          <div className="mb-16 animate-pulse">
+            <div className="h-4 bg-gray-800 rounded w-32 mb-6"></div>
+            <div className="h-12 bg-gray-800 rounded w-96 mb-4"></div>
+            <div className="h-4 bg-gray-800 rounded w-2/3"></div>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+            <div className="space-y-4">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="w-full p-6 border-2 border-gray-800 animate-pulse">
+                  <div className="h-8 bg-gray-800 rounded w-48"></div>
+                </div>
+              ))}
+            </div>
+            <div className="border-2 border-gray-800 min-h-[600px] animate-pulse"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="relative min-h-screen bg-black text-white py-20 overflow-hidden" id="projects">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+          <p className="text-red-600 font-mono">Error loading projects</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative min-h-screen bg-black text-white py-20 overflow-hidden" id="projects">
