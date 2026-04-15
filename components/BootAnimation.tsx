@@ -61,6 +61,17 @@ export default function BootAnimation() {
   const [isBooting, setIsBooting] = useState(true);
 
   useEffect(() => {
+    const COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
+    const key = 'lastBootAnimation';
+    const last = sessionStorage.getItem(key);
+    const shouldSkip = last !== null && Date.now() - Number(last) < COOLDOWN_MS;
+
+    if (shouldSkip) {
+      setIsBooting(false);
+      return;
+    }
+
+    sessionStorage.setItem(key, String(Date.now()));
     const timer = setTimeout(() => setIsBooting(false), 2800);
     return () => clearTimeout(timer);
   }, []);
