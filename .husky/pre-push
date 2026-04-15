@@ -1,6 +1,0 @@
-npx prettier --write .
-git add -A
-git diff --cached --quiet || git commit --no-verify -m "style: format code with prettier"
-npm version patch --no-git-tag-version
-git add package.json package-lock.json
-git commit --no-verify -m "chore: bump patch version"
