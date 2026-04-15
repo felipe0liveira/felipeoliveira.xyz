@@ -1,3 +1,4 @@
 npm version patch --no-git-tag-version
 git add package.json package-lock.json
 git commit --no-verify -m "chore: bump patch version"
+git push --no-verify origin HEAD
